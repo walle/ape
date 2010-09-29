@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   def index
     @projects = Project.all
-    redirect_to @projects[0] if @projects.size == 1
+    redirect_to project_wiki_index_url(@projects[0]) if @projects.size == 1
   end
 
   def show

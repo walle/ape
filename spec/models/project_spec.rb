@@ -16,7 +16,7 @@ describe Project do
   end
 
   it 'should have a parameterized slug' do
-    project = Project.new @attr
+    project = Project.create @attr
     project.slug.should == project.name.parameterize
   end
 
