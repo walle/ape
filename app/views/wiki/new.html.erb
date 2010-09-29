@@ -1,0 +1,16 @@
+<h1><%= t :new_wiki_page %></h1>
+
+<%= form_tag project_wiki_index_url(@project) do |f| %>
+  <p>
+    <%= label_tag :name %>
+    <%= text_field_tag :name %>
+  </p>
+  <p>
+    <%= label_tag :content %>
+    <%= text_area_tag :content %>
+  </p>
+  <p>
+    <%= submit_tag t(:create) %>
+  </p>
+<% end %>
+

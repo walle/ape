@@ -6,6 +6,11 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find_by_slug params[:id]
+    if @project
+      redirect_to project_wiki_index_url(@project)
+    else
+      render :status => 404
+    end
   end
 
   def new
