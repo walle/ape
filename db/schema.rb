@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(:version => 20100927214323) do
     t.string   "name"
     t.text     "description"
     t.string   "slug"
-    t.boolean  "active"
+    t.boolean  "default"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

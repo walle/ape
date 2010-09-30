@@ -1,18 +1,31 @@
 class Project < ActiveRecord::Base
-  attr_accessible :name, :description, :slug, :active
+  attr_accessible :name, :description, :slug, :default
 
   before_validation :slugify
   before_save :create_project_structure
 
   validates :name, :presence => true
-  validates :slug, :presence => true
+  validates :slug, :presence => true,
+                    :uniqueness => true
 
-  def active?
-    self.active
+  def default?
+    self.default
   end
 
   def directory
     File.join(Rails.root, 'data', slug)
+  end
+
+  def config_file
+    File.join(self.directory, 'config.yml')
+  end
+
+  def wiki_directory
+    File.join self.directory, 'wiki'
+  end
+
+  def tickets_directory
+    File.join self.directory, 'tickets'
   end
 
   def to_param
@@ -22,28 +35,28 @@ class Project < ActiveRecord::Base
   private
 
     def slugify
-      debugger
       self.slug = name.parameterize
-      debugger
     end
 
     def create_project_structure
       data_dir = File.join(Rails.root, 'data')
       Dir.mkdir data_dir if not File.exists? data_dir
-      Dir.mkdir self.directory
+      Dir.mkdir self.directory if not File.exists? self.directory
 
       git_repository = Git.init self.directory
 
-      wiki_dir = File.join self.directory, 'wiki'
-      Dir.mkdir wiki_dir
-      File.open File.join(wiki_dir, 'index.txt'), 'w' do |f|
+      Dir.mkdir wiki_directory if not File.exists? wiki_directory
+      File.open File.join(wiki_directory, 'index.txt'), 'w' do |f|
         f.puts 'h2. Welcome'
       end
 
-      tickets_dir = File.join self.directory, 'tickets'
-      Dir.mkdir tickets_dir
+      Dir.mkdir tickets_directory if not File.exists? tickets_directory
+      FileUtils.touch File.join(tickets_directory, '.gitinclude')
 
-      FileUtils.touch File.join(self.directory, 'config.yml')
+      FileUtils.touch config_file
+
+      git_repository.config('user.name', 'system')
+      git_repository.config('user.email', 'system@local')
 
       git_repository.add '.'
       git_repository.commit 'Create project structure'

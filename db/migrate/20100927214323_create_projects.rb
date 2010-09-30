@@ -3,8 +3,8 @@ class CreateProjects < ActiveRecord::Migration
     create_table :projects do |t|
       t.string :name
       t.text :description
-      t.string :slug
-      t.boolean :active
+      t.string :slug, :unique => true
+      t.boolean :default
 
       t.timestamps
     end

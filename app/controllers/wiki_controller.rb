@@ -11,8 +11,13 @@ class WikiController < ApplicationController
 
   def create
     page = params[:name].parameterize
-    set_content page, params[:content]
-    git_repository.commit 'Add page: ' + page
+
+    message = params[:commit_message]
+    if message.empty?
+      message = 'Add page: ' + page
+    end
+
+    set_content page, params[:content], message
 
     redirect_to project_wiki_url :id => page
   end
@@ -22,8 +27,7 @@ class WikiController < ApplicationController
   end
 
   def update
-    set_content params[:id], params[:content]
-    git_repository.commit 'Update page: ' + page
+    set_content params[:id], params[:content], 'Update page: ' + page
 
     redirect_to project_wiki_url :id => params[:id]
   end
@@ -64,13 +68,14 @@ class WikiController < ApplicationController
       page + '.txt'
     end
 
-    def set_content(page, content)
+    def set_content(page, content, message)
       filename = File.join @project.directory, 'wiki/', page_name(page)
       File.open filename, 'w' do |f|
-          f.puts content
-        end
+        f.puts content
+      end
       git_repository = Git.open @project.directory
       git_repository.add filename
+      git_repository.commit message
     end
 end
 

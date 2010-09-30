@@ -6,7 +6,7 @@ describe Project do
     @attr = {
       :name => 'Project 1',
       :description => '',
-      :active => false
+      :default => false
     }
   end
 
@@ -15,20 +15,41 @@ describe Project do
     no_name_project.should_not be_valid
   end
 
-  it 'should have a parameterized slug' do
-    project = Project.create @attr
-    project.slug.should == project.name.parameterize
-  end
-
-  it 'should have a active? method' do
+  it 'should have a default? method' do
     project = Project.new @attr
-    project.active?.should == @attr[:active]
+    project.default?.should == @attr[:default]
   end
 
-  pending 'should have a config'
+  pending 'only one project at a time should be default'
 
-  pending 'should have a wiki'
+  describe 'after create' do
+    before :each do
+      @attr = {
+        :name => 'Project 1',
+        :description => '',
+        :default => false
+      }
+      @project = Project.create @attr
+    end
+    it 'should have a parameterized slug' do
+      @project.slug.should == @project.name.parameterize
+    end
 
-  pending 'should have tickets'
+    pending 'is should have unique slug'
+
+    it 'should have a config file' do
+      File.exists?(@project.config_file).should be_true
+    end
+
+    it 'should have a wiki directory' do
+      File.exists?(@project.wiki_directory).should be_true
+      File.directory?(@project.wiki_directory).should be_true
+    end
+
+    it 'should have a tickets directory' do
+      File.exists?(@project.tickets_directory).should be_true
+      File.directory?(@project.tickets_directory).should be_true
+    end
+  end
 end
 
