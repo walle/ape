@@ -1,0 +1,17 @@
+#header
+{
+  background-color: #343434;
+  height: 54px;
+  color: #fff;
+}
+
+.left
+{
+  float: left;
+}
+
+.right
+{
+  float: right;
+}
+

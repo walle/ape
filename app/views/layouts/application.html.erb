@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ape</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
-  <%= csrf_meta_tag %>
+  <title>Rblog</title>
+  <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
+  <%= stylesheet_link_tag 'blueprint/print',  :media => 'print' %>
+  <!--[if lt IE 8]><%= stylesheet_link_tag 'blueprint/ie' %><![endif]-->
+  <%= stylesheet_link_tag 'application', :media => 'screen' %>
 </head>
 <body>
-
-<%= yield %>
-
+<div id="header">
+  <div class="left">
+    <h1>Header</h1>
+  </div>
+  <div class="right">
+    <p>Controls</p>
+  </div>
+</div>
+<div id="menu">
+<p>Menu</p>
+</div>
+<div id="wrapper">
+  <div class="container">
+    <%= yield %>
+  </div>
+</div>
 </body>
 </html>
+
