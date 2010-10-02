@@ -72,6 +72,16 @@ class WikiController < ApplicationController
     end
   end
 
+  def revisions
+    page = params[:id].to_s
+    filename = build_filename @project, page
+
+    git_repository = Git.open @project.directory
+    @revisions = git_repository.gblob(File.join('wiki', page)).log.map do |commit|
+      commit
+    end
+  end
+
   private
     def get_project
       @project = Project.find_by_slug params[:project_id]
@@ -93,7 +103,7 @@ class WikiController < ApplicationController
     end
 
     def load_contents(project, page, rewrite_links = true)
-      filename = File.join project.directory, 'wiki/', page, 'index.txt'
+      filename = build_filename project, page
       @contents = file_contents filename
       @contents.gsub!(/\[\[(.+)\]\]/) do
         url = $1.split('/').map { |file| file.parameterize }
@@ -104,6 +114,10 @@ class WikiController < ApplicationController
           '<a class="new" href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         end
         end if rewrite_links
+    end
+
+    def build_filename(project, page)
+      File.join project.directory, 'wiki/', page, 'index.txt'
     end
 
     def file_contents(filename)

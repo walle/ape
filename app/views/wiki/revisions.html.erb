@@ -1,0 +1,16 @@
+<h1><%= t(:revisions) %></h1>
+
+<%= render 'menu', :no_edit => true %>
+
+<% if(@revisions.length > 0) %>
+  <ul>
+  <% @revisions.each do |revision| %>
+    <li>
+      <%= revision %> - <%= revision.message %>
+    </li>
+  <% end %>
+  </ul>
+<% else %>
+  <p><%= t(:there_are_no_revisions) %></p>
+<% end %>
+
