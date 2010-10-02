@@ -1,6 +1,12 @@
+body
+{
+  font-family: "Lucida Sans Unicode", "Lucida Sans", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+}
+
 a
 {
   text-decoration: none;
+  color: #3070b0;
 }
 
 a:hover
@@ -24,13 +30,62 @@ ul
   background: #333;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0.30, #333), color-stop(0.80, #505050));
   background: -moz-linear-gradient(center bottom, #333 30%, #505050 80%);
-  height: 54px;
+  min-height: 40px;
   color: #fff;
 }
 
 #header h1
 {
   color: #fff;
+  margin: 0 18px;
+}
+
+#menu
+{
+  background: #e0e0e0;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0.35, #d4d4d4), color-stop(0.60, #e8e8e8));
+  background: -moz-linear-gradient(center bottom, #d4d4d4 35%, #e8e8e8 60%);
+  margin-bottom: 18px;
+}
+
+#menu ul
+{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#menu li
+{
+  float: left;
+  border-right: 1px solid #afafaf;
+}
+
+#menu li a
+{
+  display: block;
+  color: #8a8a8a;
+  padding: 2px 18px;
+}
+
+#menu li a:hover
+{
+  color: #333;
+  text-decoration: none;
+}
+
+#menu li.active a
+{
+  background: #d0d0d0;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0.35, #c4c4c4), color-stop(0.60, #d8d8d8));
+  background: -moz-linear-gradient(center bottom, #c4c4c4 35%, #d8d8d8 60%);
+  color: #333;
+}
+
+#content
+{
+  float: left;
+  margin-left: 36px;
 }
 
 .left
@@ -41,5 +96,10 @@ ul
 .right
 {
   float: right;
+}
+
+.breaker
+{
+  clear: both;
 }
 

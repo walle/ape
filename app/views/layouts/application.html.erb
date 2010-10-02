@@ -8,23 +8,37 @@
   <%= stylesheet_link_tag 'application', :media => 'screen' %>
 </head>
 <body>
-<div id="header">
-  <div class="left">
-    <h1>Header</h1>
+  <div id="header">
+    <div class="left">
+      <h1><%= image_tag 'logo.png', :alt => 'Ape' %> Ape</h1>
+    </div>
+    <div class="right">
+      <p>Controls</p>
+    </div>
+    <div class="breaker"></div>
   </div>
-  <div class="right">
-    <p>Controls</p>
+  <div id="menu">
+    <ul class="left">
+      <li class="active"><%= link_to t(:wiki), wiki_index_url(@project) %></li>
+      <li><a href="">New ticket</a></li>
+      <li><a href="">Tickets</a></li>
+      <li><a href="">Milestones</a></li>
+      <li><a href="">Browse code</a></li>
+      <li><a href="">Changesets</a></li>
+      <li><a href="">Search</a></li>
+    </ul>
+    <ul class="right">
+      <li><a href="">Projects</a></li>
+      <li><a href="">Administration</a></li>
+    </ul>
+    <div class="breaker"></div>
   </div>
-</div>
-<div id="menu">
-<p>Menu</p>
-</div>
-<div id="wrapper">
-  <div class="container">
-    <%= yield %>
+  <div id="wrapper">
+    <div id="content" class="container">
+      <%= yield %>
+    </div>
   </div>
-</div>
-<%= javascript_include_tag :all %>
+  <%= javascript_include_tag :all %>
 </body>
 </html>
 
