@@ -1,3 +1,19 @@
+a
+{
+  text-decoration: none;
+}
+
+a:hover
+{
+  text-decoration: underline;
+}
+
+a.new
+{
+  color: #b10000;
+  font-weight: bold;
+}
+
 ul
 {
   list-style-type: square;
@@ -25,10 +41,5 @@ ul
 .right
 {
   float: right;
-}
-
-a.new
-{
-  color: #ff0000;
 }
 
