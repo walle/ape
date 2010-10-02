@@ -1,3 +1,5 @@
+<h1><%= @page %></h1>
+
 <%= render 'contents' %>
 
 <%= button_to t(:delete), wiki_page_path(@project), :method => :delete, :confirm => t(:are_you_sure) %>

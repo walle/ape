@@ -6,7 +6,8 @@ class WikiController < ApplicationController
   end
 
   def show
-    load_project_data @project, params[:id]
+    @page = params[:id]
+    load_project_data @project, @page
   end
 
   def create
