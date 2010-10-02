@@ -31,7 +31,7 @@ class WikiController < ApplicationController
   end
 
   def edit
-    load_contents @project, params[:id].to_s, false
+    load_contents @project, params[:id].to_s, params[:revision], false
   end
 
   def update
@@ -77,7 +77,7 @@ class WikiController < ApplicationController
     filename = build_filename @project, page
 
     git_repository = Git.open @project.directory
-    @revisions = git_repository.gblob(File.join('wiki', page)).log.map do |commit|
+    @revisions = git_repository.log(500).path(File.join('wiki', page, 'index.txt')).map do |commit|
       commit
     end
   end
@@ -87,8 +87,8 @@ class WikiController < ApplicationController
       @project = Project.find_by_slug params[:project_id]
     end
 
-    def load_project_data(project, page, rewrite_links = true)
-      load_contents(project, page, rewrite_links)
+    def load_project_data(project, page, revision = nil, rewrite_links = true)
+      load_contents(project, page, revision, rewrite_links)
       if !@contents.empty?
         @contents = RedCloth.new(@contents).to_html.html_safe
       else
@@ -102,9 +102,13 @@ class WikiController < ApplicationController
       end
     end
 
-    def load_contents(project, page, rewrite_links = true)
+    def load_contents(project, page, revision = nil, rewrite_links = true)
       filename = build_filename project, page
-      @contents = file_contents filename
+      @contents = file_contents filename, revision
+      do_rewrite_links project, page if rewrite_links
+    end
+
+    def do_rewrite_links(project, page)git_repository = Git.open @project.directory
       @contents.gsub!(/\[\[(.+)\]\]/) do
         url = $1.split('/').map { |file| file.parameterize }
         url = File.join page, url unless page.empty?
@@ -113,14 +117,27 @@ class WikiController < ApplicationController
         else
           '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
         end
-        end if rewrite_links
+      end
     end
 
     def build_filename(project, page)
       File.join project.directory, 'wiki/', page, 'index.txt'
     end
 
-    def file_contents(filename)
+    def file_contents(filename, revision)
+      contents = ''
+      if (revision.nil?)
+        contents = read_file filename
+      else
+        git_repository = Git.open @project.directory
+        git_repository.checkout revision
+        contents = read_file filename
+        git_repository.checkout 'master'
+      end
+      contents
+    end
+
+    def read_file(filename)
       contents = ''
       if File.exists? filename
         file = File.open(filename, "r")

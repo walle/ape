@@ -6,7 +6,14 @@
   <ul>
   <% @revisions.each do |revision| %>
     <li>
-      <%= revision %> - <%= revision.message %>
+      <% if (params[:id].nil?) %>
+      <% url = edit_wiki_index_url(@project, :revision => revision) %>
+    <% else %>
+      <% url = edit_wiki_page_url(@project, :revision => revision) %>
+    <% end %>
+      <%= link_to revision, url %>
+      - <%= revision.message %>
+      - <%= time_ago_in_words revision.date.to_time %> <%= t(:ago) %>
     </li>
   <% end %>
   </ul>
