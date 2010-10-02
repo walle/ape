@@ -2,5 +2,6 @@ en:
   create: Create
   update: Update
   delete: Delete
+  edit: Edit
   are_you_sure: Are you sure?
 

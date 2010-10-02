@@ -4,7 +4,7 @@ Ape::Application.routes.draw do
   end
 
   match '/projects/:project_id/wiki(.:format)' => 'wiki#index', :as => 'wiki_index', :via => 'get'
-  match '/projects/:project_id/wiki/edit(.:format)' => 'wiki#edit', :as => 'wiki_index', :via => 'get'
+  match '/projects/:project_id/wiki/edit(.:format)' => 'wiki#edit', :as => 'edit_wiki_index', :via => 'get'
   match '/projects/:project_id/wiki(.:format)' => 'wiki#update', :as => 'wiki_index', :via => 'put'
   match '/projects/:project_id/wiki/*id/new(.:format)' => 'wiki#new', :as => 'new_wiki_page', :via => 'get'
   match '/projects/:project_id/wiki/*id/edit(.:format)' => 'wiki#edit', :as => 'edit_wiki_page', :via => 'get'

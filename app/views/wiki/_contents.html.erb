@@ -1,2 +1,10 @@
+<% if (params[:id].nil?) %>
+  <% url = edit_wiki_index_url(@project) %>
+<% else %>
+  <% url = edit_wiki_page_url(@project) %>
+<% end %>
+
+<%= link_to t(:edit), url %>
+
 <%= @contents %>
 
