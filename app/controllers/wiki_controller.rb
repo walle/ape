@@ -27,7 +27,11 @@ class WikiController < ApplicationController
 
     set_content page, params[:content], message
 
-    redirect_to wiki_page_url :id => page
+    if (params[:commit] == I18n.t(:save_and_continue))
+      redirect_to edit_wiki_page_url :id => page
+    else
+      redirect_to wiki_page_url :id => page
+    end
   end
 
   def edit
@@ -45,9 +49,17 @@ class WikiController < ApplicationController
     set_content page.to_s, params[:content], message
 
     if (page.nil?)
-      redirect_to wiki_index_url
+      if (params[:commit] == I18n.t(:save_and_continue))
+        redirect_to edit_wiki_index_url
+      else
+        redirect_to wiki_index_url
+      end
     else
-      redirect_to wiki_page_url :id => page
+      if (params[:commit] == I18n.t(:save_and_continue))
+        redirect_to edit_wiki_page_url :id => page
+      else
+        redirect_to wiki_page_url :id => page
+      end
     end
   end
 

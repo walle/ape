@@ -108,9 +108,17 @@ ul
 }
 
 /* Form styles */
+#wiki-form
+{
+  background-color: #fafafa;
+  border: 1px solid #bdbdbd;
+  padding: 18px;
+}
+
 #wiki-form ul
 {
   list-style-type: none;
+  padding: 0;
 }
 
 #wiki-form textarea
