@@ -1,12 +1,23 @@
 <h1><%= t :edit_wiki_page %></h1>
 
-<%= form_tag url_for(:controller => :wiki, :action => :update, :method => 'PUT', :project_id => @project.slug, :id => params[:id]) do |f| %>
-  <p>
-    <%= label_tag :content %>
-    <%= text_area_tag :content, @contents %>
-  </p>
-  <p>
-    <%= submit_tag t(:update) %>
-  </p>
+<% if (params[:id].nil?) %>
+  <% url = wiki_index_url(@project) %>
+<% else %>
+  <% url = wiki_page_url(@project) %>
+<% end %>
+<%= form_tag url, {:method => :put} do |f| %>
+  <ul>
+    <li>
+      <%= label_tag :content %><br />
+      <%= text_area_tag :content, @contents %>
+    </li>
+    <li>
+      <%= label_tag :commit_message %><br />
+      <%= text_area_tag :commit_message %>
+    </li>
+    <li>
+      <%= submit_tag t(:update) %>
+    </li>
+  </ul>
 <% end %>
 

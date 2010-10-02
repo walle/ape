@@ -1,20 +1,22 @@
 <h1><%= t :new_wiki_page %></h1>
 
-<%= form_tag project_wiki_index_url(@project) do |f| %>
-  <p>
-    <%= label_tag :name %>
-    <%= text_field_tag :name %>
-  </p>
-  <p>
-    <%= label_tag :content %>
-    <%= text_area_tag :content %>
-  </p>
-  <p>
-    <%= label_tag :commit_message %>
-    <%= text_area_tag :commit_message %>
-  </p>
-  <p>
-    <%= submit_tag t(:create) %>
-  </p>
+<%= form_tag wiki_page_url(@project) do |f| %>
+  <ul>
+    <li>
+      <%= label_tag :name %><br />
+      <%= text_field_tag :name %>
+    </li>
+    <li>
+      <%= label_tag :content %><br />
+      <%= text_area_tag :content %>
+    </li>
+    <li>
+      <%= label_tag :commit_message %><br />
+      <%= text_area_tag :commit_message %>
+    </li>
+    <li>
+      <%= submit_tag t(:create) %>
+    </li>
+  </ul>
 <% end %>
 

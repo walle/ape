@@ -2,7 +2,7 @@ class WikiController < ApplicationController
   before_filter :get_project
 
   def index
-    load_project_data @project, 'index'
+    load_project_data @project, ''
   end
 
   def show
@@ -10,26 +10,44 @@ class WikiController < ApplicationController
   end
 
   def create
-    page = params[:name].parameterize
+    id = params[:id]
+    name = params[:name].parameterize
+
+    if (id.nil?)
+      page = params[:name].parameterize
+    else
+      page = File.join id, name
+    end
 
     message = params[:commit_message]
     if message.empty?
-      message = 'Add page: ' + page
+      message = 'Add page: ' + name
     end
 
     set_content page, params[:content], message
 
-    redirect_to project_wiki_url :id => page
+    redirect_to wiki_page_url :id => page
   end
 
   def edit
-    load_contents @project, params[:id]
+    load_contents @project, params[:id].to_s
   end
 
   def update
-    set_content params[:id], params[:content], 'Update page: ' + page
+    page = params[:id]
 
-    redirect_to project_wiki_url :id => params[:id]
+    message = params[:commit_message]
+    if message.empty?
+      message = 'Update page: ' + (page.nil? ? 'index' : page )
+    end
+
+    set_content page.to_s, params[:content], message
+
+    if (page.nil?)
+      redirect_to wiki_index_url
+    else
+      redirect_to wiki_page_url :id => page
+    end
   end
 
   def destroy
@@ -51,7 +69,7 @@ class WikiController < ApplicationController
     end
 
     def load_contents(project, page)
-      filename = File.join project.directory, 'wiki/', page_name(page)
+      filename = File.join project.directory, 'wiki/', page, 'index.txt'
       @contents = file_contents filename
     end
 
@@ -64,18 +82,16 @@ class WikiController < ApplicationController
       contents
     end
 
-    def page_name(page)
-      page + '.txt'
-    end
-
     def set_content(page, content, message)
-      filename = File.join @project.directory, 'wiki/', page_name(page)
+      page_dir = File.join @project.directory, 'wiki/', page
+      Dir.mkdir page_dir unless File.exists? page_dir
+      filename =  File.join page_dir, 'index.txt'
       File.open filename, 'w' do |f|
         f.puts content
       end
       git_repository = Git.open @project.directory
       git_repository.add filename
-      git_repository.commit message
+      git_repository.commit message rescue nil
     end
 end
 
