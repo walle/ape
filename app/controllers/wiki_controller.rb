@@ -51,7 +51,16 @@ class WikiController < ApplicationController
   end
 
   def destroy
+    page = params[:id]
 
+    message = params[:commit_message].to_s
+    if message.empty?
+      message = 'Delete page: ' + (page.nil? ? 'index' : page )
+    end
+
+    delete_file page, message
+
+    redirect_to wiki_index_url
   end
 
   private
@@ -92,6 +101,16 @@ class WikiController < ApplicationController
       git_repository = Git.open @project.directory
       git_repository.add filename
       git_repository.commit message rescue nil
+    end
+
+    def delete_file(page, message)
+      page_dir = File.join @project.directory, 'wiki/', page
+      filename =  File.join page_dir, 'index.txt'
+      if (File.exists? filename)
+        git_repository = Git.open @project.directory
+        git_repository.remove filename
+        git_repository.commit message rescue nil
+      end
     end
 end
 
