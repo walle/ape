@@ -83,7 +83,7 @@ class WikiController < ApplicationController
       else
         dirs = File.split page
         parent_dir = dirs[0]
-        if (File.exists? parent_dir)
+        if (File.exists? File.join project.directory, 'wiki/', parent_dir)
           redirect_to new_wiki_page_url :id => parent_dir, :name => dirs[1]
         else
           render_404
@@ -95,11 +95,12 @@ class WikiController < ApplicationController
       filename = File.join project.directory, 'wiki/', page, 'index.txt'
       @contents = file_contents filename
       @contents.gsub!(/\[\[(.+)\]\]/) do
-        page = $1.split('/').map { |file| file.parameterize }
-        if (File.exists?(File.join project.directory, 'wiki/', page, 'index.txt'))
+        url = $1.split('/').map { |file| file.parameterize }
+        url = File.join page, url
+        if (File.exists?(File.join project.directory, 'wiki/', url, 'index.txt'))
           '<a href="' + wiki_page_url(:id => page) + '">' + $1 + '</a>'
         else
-          '<a class="new" href="' + wiki_page_url(:id => page) + '">' + $1 + '</a>'
+          '<a class="new" href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         end
         end if rewrite_links
     end
