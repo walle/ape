@@ -30,7 +30,7 @@ class WikiController < ApplicationController
   end
 
   def edit
-    load_contents @project, params[:id].to_s
+    load_contents @project, params[:id].to_s, false
   end
 
   def update
@@ -68,8 +68,8 @@ class WikiController < ApplicationController
       @project = Project.find_by_slug params[:project_id]
     end
 
-    def load_project_data(project, page)
-      load_contents(project, page)
+    def load_project_data(project, page, rewrite_links = true)
+      load_contents(project, page, rewrite_links)
       if !@contents.empty?
         @contents = RedCloth.new(@contents).to_html.html_safe
       else
@@ -77,9 +77,10 @@ class WikiController < ApplicationController
       end
     end
 
-    def load_contents(project, page)
+    def load_contents(project, page, rewrite_links = true)
       filename = File.join project.directory, 'wiki/', page, 'index.txt'
       @contents = file_contents filename
+      @contents.gsub!(/\[\[(.+)\]\]/){'<a href="' + wiki_page_url(:id => $1) + '">' + $1 + '</a>'} if rewrite_links
     end
 
     def file_contents(filename)

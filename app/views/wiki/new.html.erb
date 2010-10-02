@@ -1,6 +1,12 @@
 <h1><%= t :new_wiki_page %></h1>
 
-<%= form_tag wiki_page_url(@project) do |f| %>
+<% if (params[:id].nil?) %>
+  <% url = wiki_index_page_url(@project) %>
+<% else %>
+  <% url = wiki_page_url(@project) %>
+<% end %>
+
+<%= form_tag url do |f| %>
   <ul>
     <li>
       <%= label_tag :name %><br />
