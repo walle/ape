@@ -1,5 +1,7 @@
 <h1><%= t(:pages) %></h1>
 
+<%= render 'menu', :no_edit => true %>
+
 <% if(@pages.length > 0) %>
   <ul>
   <% @pages.each do |page| %>
