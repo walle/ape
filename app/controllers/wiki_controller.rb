@@ -96,9 +96,9 @@ class WikiController < ApplicationController
       @contents = file_contents filename
       @contents.gsub!(/\[\[(.+)\]\]/) do
         url = $1.split('/').map { |file| file.parameterize }
-        url = File.join page, url
+        url = File.join page, url unless page.empty?
         if (File.exists?(File.join project.directory, 'wiki/', url, 'index.txt'))
-          '<a href="' + wiki_page_url(:id => page) + '">' + $1 + '</a>'
+          '<a href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         else
           '<a class="new" href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         end
