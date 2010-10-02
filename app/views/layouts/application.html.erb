@@ -10,7 +10,10 @@
 <body>
   <div id="header">
     <div class="left">
-      <h1><%= image_tag 'logo.png', :alt => 'Ape' %> Ape</h1>
+      <h1>
+        <%= link_to image_tag('logo.png', :alt => 'Ape'), root_path %>
+        <%= link_to 'Ape', root_path %>
+      </h1>
     </div>
     <div class="right">
       <p>Controls</p>
@@ -18,7 +21,8 @@
     <div class="breaker"></div>
   </div>
   <div id="menu">
-    <ul class="left">
+    <% unless @project.nil? -%>
+      <ul class="left">
       <li class="active"><%= link_to t(:wiki), wiki_index_url(@project) %></li>
       <li><a href="">New ticket</a></li>
       <li><a href="">Tickets</a></li>
@@ -27,6 +31,7 @@
       <li><a href="">Changesets</a></li>
       <li><a href="">Search</a></li>
     </ul>
+    <% end -%>
     <ul class="right">
       <li><a href="">Projects</a></li>
       <li><a href="">Administration</a></li>

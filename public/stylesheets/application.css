@@ -36,8 +36,22 @@ ul
 
 #header h1
 {
-  color: #fff;
   margin: 0 18px;
+}
+
+#header h1 a
+{
+  color: #fff;
+}
+
+#header h1 img
+{
+  vertical-align: text-bottom;
+}
+
+#header h1 a:hover
+{
+  text-decoration: none;
 }
 
 #menu
