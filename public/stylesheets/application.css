@@ -1,3 +1,8 @@
+ul
+{
+  list-style-type: square;
+}
+
 #header
 {
   background-color: #343434;

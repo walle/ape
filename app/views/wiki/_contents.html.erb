@@ -6,7 +6,7 @@
   <% pages_url = wiki_pages_url(@project) %>
 <% end %>
 
-<%= link_to t(:edit), edit_url %> | <%= link_to t(:home), wiki_index_url %> | <%= link_to t(:pages), pages_url %>
+<%= link_to t(:home), wiki_index_url %> | <%= link_to t(:pages), pages_url %> | <%= link_to t(:edit), edit_url %>
 
 <%= @contents %>
 
