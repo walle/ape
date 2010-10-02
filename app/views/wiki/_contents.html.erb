@@ -1,10 +1,12 @@
 <% if (params[:id].nil?) %>
-  <% url = edit_wiki_index_url(@project) %>
+  <% edit_url = edit_wiki_index_url(@project) %>
+  <% pages_url = wiki_index_pages_url(@project) %>
 <% else %>
-  <% url = edit_wiki_page_url(@project) %>
+  <% edit_url = edit_wiki_page_url(@project) %>
+  <% pages_url = wiki_pages_url(@project) %>
 <% end %>
 
-<%= link_to t(:edit), url %> | <%= link_to t(:home), wiki_index_url %>
+<%= link_to t(:edit), edit_url %> | <%= link_to t(:home), wiki_index_url %> | <%= link_to t(:pages), pages_url %>
 
 <%= @contents %>
 

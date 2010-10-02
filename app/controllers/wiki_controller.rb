@@ -63,6 +63,14 @@ class WikiController < ApplicationController
     redirect_to wiki_index_url
   end
 
+  def pages
+    page = params[:id].to_s
+    Dir.chdir File.join @project.directory, 'wiki/', page
+    @pages = Dir['*/'].map do |p|
+      File.join page, p.delete('/')
+    end
+  end
+
   private
     def get_project
       @project = Project.find_by_slug params[:project_id]

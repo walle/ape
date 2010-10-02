@@ -1,0 +1,14 @@
+<h1><%= t(:pages) %></h1>
+
+<% if(@pages.length > 0) %>
+  <ul>
+  <% @pages.each do |page| %>
+    <li>
+      <%= link_to page, wiki_page_url(@project, :id => page) %>
+    </li>
+  <% end %>
+  </ul>
+<% else %>
+
+<% end %>
+
