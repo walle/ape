@@ -16,16 +16,18 @@
   </div>
 <% end %>
 
-  <p>
-    <%= f.label :name %>
+<ul>
+  <li>
+    <%= f.label :name %><br />
     <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :description %>
+  </li>
+  <li>
+    <%= f.label :description %><br />
     <%= f.text_area :description %>
-  </p>
-  <p>
+  </li>
+  <li>
     <%= f.submit %>
-  </p>
+  </li>
+</ul>
 <% end %>
 

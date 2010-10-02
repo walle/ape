@@ -1,13 +1,13 @@
 class ProjectsController < ApplicationController
   def index
     @projects = Project.all
-    redirect_to project_wiki_index_url(@projects[0]) if @projects.size == 1
+    redirect_to wiki_index_url(@projects[0]) if @projects.size == 1
   end
 
   def show
     @project = Project.find_by_slug params[:id]
     if @project
-      redirect_to project_wiki_index_url(@project)
+      redirect_to wiki_index_url(@project)
     else
       render :status => 404
     end
