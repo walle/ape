@@ -6,18 +6,20 @@
   <% url = wiki_page_url(@project) %>
 <% end %>
 <%= form_tag url, {:method => :put} do |f| %>
-  <ul>
-    <li>
-      <%= label_tag :content %><br />
-      <%= text_area_tag :content, @contents %>
-    </li>
-    <li>
-      <%= label_tag :commit_message %><br />
-      <%= text_field_tag :commit_message %>
-    </li>
-    <li>
-      <%= submit_tag t(:update) %>
-    </li>
-  </ul>
+  <div id="wiki-form">
+    <ul>
+      <li>
+        <%= label_tag :content %><br />
+        <%= text_area_tag :content, @contents %>
+      </li>
+      <li>
+        <%= label_tag :commit_message %><br />
+        <%= text_field_tag :commit_message %>
+      </li>
+      <li>
+        <%= submit_tag t(:update) %>
+      </li>
+    </ul>
+  </div>
 <% end %>
 

@@ -1,3 +1,5 @@
+/* Overrides */
+
 body
 {
   font-family: "Lucida Sans Unicode", "Lucida Sans", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
@@ -24,6 +26,8 @@ ul
 {
   list-style-type: square;
 }
+
+/* Layout */
 
 #header
 {
@@ -102,6 +106,24 @@ ul
   float: left;
   margin-left: 36px;
 }
+
+/* Form styles */
+#wiki-form ul
+{
+  list-style-type: none;
+}
+
+#wiki-form textarea
+{
+  width: 100%;
+}
+
+#wiki-form input[type=text]
+{
+  width: 50%;
+}
+
+/* General classes */
 
 .left
 {
