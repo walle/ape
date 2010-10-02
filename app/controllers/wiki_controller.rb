@@ -46,7 +46,7 @@ class WikiController < ApplicationController
       if !@contents.empty?
         @contents = RedCloth.new(@contents).to_html.html_safe
       else
-        render :status => 404
+        render_404
       end
     end
 
