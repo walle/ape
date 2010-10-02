@@ -80,7 +80,7 @@ class WikiController < ApplicationController
     def load_contents(project, page, rewrite_links = true)
       filename = File.join project.directory, 'wiki/', page, 'index.txt'
       @contents = file_contents filename
-      @contents.gsub!(/\[\[(.+)\]\]/){'<a href="' + wiki_page_url(:id => $1) + '">' + $1 + '</a>'} if rewrite_links
+      @contents.gsub!(/\[\[(.+)\]\]/){'<a href="' + wiki_page_url(:id => $1.split('/').map { |file| file.parameterize }) + '">' + $1 + '</a>'} if rewrite_links
     end
 
     def file_contents(filename)
