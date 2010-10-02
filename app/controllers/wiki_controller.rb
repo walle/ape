@@ -111,7 +111,7 @@ class WikiController < ApplicationController
         if (File.exists?(File.join project.directory, 'wiki/', url, 'index.txt'))
           '<a href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         else
-          '<a class="new" href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
+          '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
         end
         end if rewrite_links
     end
