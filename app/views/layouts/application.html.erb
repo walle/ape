@@ -24,18 +24,11 @@
   <div id="menu">
     <% unless @project.nil? -%>
       <ul class="left">
-      <li class="active"><%= link_to t(:wiki), wiki_index_url(@project) %></li>
-      <li><a href="">New ticket</a></li>
-      <li><a href="">Tickets</a></li>
-      <li><a href="">Milestones</a></li>
-      <li><a href="">Browse code</a></li>
-      <li><a href="">Changesets</a></li>
-      <li><a href="">Search</a></li>
+      <li><%= link_to t(:wiki), wiki_index_url(@project) %></li>
     </ul>
     <% end -%>
     <ul class="right">
-      <li><a href="">Projects</a></li>
-      <li><a href="">Administration</a></li>
+      <li><%= link_to t(:projects), projects_path  %></li>
     </ul>
     <div class="breaker"></div>
   </div>
