@@ -10,7 +10,7 @@
   <ul>
     <li>
       <%= label_tag :name %><br />
-      <%= text_field_tag :name %>
+      <%= text_field_tag :name, params[:name].to_s %>
     </li>
     <li>
       <%= label_tag :content %><br />

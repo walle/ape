@@ -73,7 +73,13 @@ class WikiController < ApplicationController
       if !@contents.empty?
         @contents = RedCloth.new(@contents).to_html.html_safe
       else
-        render_404
+        dirs = File.split page
+        parent_dir = dirs[0]
+        if (File.exists? parent_dir)
+          redirect_to new_wiki_page_url :id => parent_dir, :name => dirs[1]
+        else
+          render_404
+        end
       end
     end
 
