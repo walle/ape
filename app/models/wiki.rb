@@ -69,6 +69,10 @@ class Wiki
     end
   end
 
+  def index?
+    @page.empty?
+  end
+
   def to_html
     RedCloth.new(@contents).to_html.html_safe
   end

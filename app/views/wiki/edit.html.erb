@@ -1,10 +1,11 @@
 <h1><%= t :edit_wiki_page %></h1>
 
-<% if (params[:id].nil?) %>
+<% if (@wiki.index?) %>
   <% url = wiki_index_url(@project) %>
 <% else %>
   <% url = wiki_page_url(@project) %>
 <% end %>
+
 <%= form_tag url, {:method => :put} do |f| %>
   <div id="wiki-form">
     <ul>

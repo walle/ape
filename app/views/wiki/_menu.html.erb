@@ -1,4 +1,4 @@
-<% if (params[:id].nil?) %>
+<% if (@wiki.index?) %>
   <% edit_url = edit_wiki_index_url(@project) %>
   <% pages_url = wiki_index_pages_url(@project) %>
   <% revisions_url = wiki_index_revisions_url(@project) %>

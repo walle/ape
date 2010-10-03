@@ -1,6 +1,6 @@
 <h1><%= t :new_wiki_page %></h1>
 
-<% if (params[:id].nil?) %>
+<% if (@wiki.index?) %>
   <% url = wiki_index_page_url(@project) %>
 <% else %>
   <% url = wiki_page_url(@project) %>

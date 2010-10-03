@@ -2,30 +2,29 @@ class WikiController < ApplicationController
   before_filter :get_project
 
   def index
-    wiki = Wiki.find({:project => @project, :page => ''})
-    @contents = wiki.to_html
+    @wiki = Wiki.find({:project => @project, :page => ''})
+    @contents = @wiki.to_html
     rewrite_links ''
   end
 
   def show
-    @page = params[:id]
-    wiki = Wiki.find({:project => @project, :page => @page})
-    if wiki.contents.empty?
-      parent = wiki.parent
+    @wiki = Wiki.find({:project => @project, :page => params[:id]})
+    if @wiki.contents.empty?
+      parent = @wiki.parent
       if (parent.nil?)
         render_404
       else
-        dirs = File.split @page
+        dirs = File.split @wiki.page
         new_page = dirs[1]
-        if parent.page.empty?
+        if parent.index?
           redirect_to new_wiki_index_page_url :name => new_page
         else
           redirect_to new_wiki_page_url :id => parent.page, :name => new_page
         end
       end
     else
-      @contents = wiki.to_html
-      rewrite_links @page
+      @contents = @wiki.to_html
+      rewrite_links @wiki.page
     end
   end
 
@@ -47,8 +46,8 @@ class WikiController < ApplicationController
   end
 
   def edit
-    wiki = Wiki.find({:project => @project, :page => params[:id], :revision => params[:revision]})
-    @contents = wiki.contents
+    @wiki = Wiki.find({:project => @project, :page => params[:id], :revision => params[:revision]})
+    @contents = @wiki.contents
   end
 
   def update
@@ -64,9 +63,9 @@ class WikiController < ApplicationController
     wiki.save! message
 
     if (params[:commit] == I18n.t(:save_and_continue))
-      redirect_to((wiki.page.empty? ? edit_wiki_index_url : edit_wiki_page_url(:id => wiki.page)))
+      redirect_to((wiki.index? ? edit_wiki_index_url : edit_wiki_page_url(:id => wiki.page)))
     else
-      redirect_to((wiki.page.empty? ? wiki_index_url : wiki_page_url(:id => wiki.page)))
+      redirect_to((wiki.index? ? wiki_index_url : wiki_page_url(:id => wiki.page)))
     end
   end
 
@@ -85,18 +84,18 @@ class WikiController < ApplicationController
     if (parent.nil?)
       redirect_to wiki_index_url
     else
-      redirect_to((parent.page.empty? ? wiki_index_url : wiki_page_url(:id => parent.page)))
+      redirect_to((parent.index? ? wiki_index_url : wiki_page_url(:id => parent.page)))
     end
   end
 
   def pages
-    wiki = Wiki.find({:project => @project, :page => params[:id]})
-    @pages = wiki.pages
+    @wiki = Wiki.find({:project => @project, :page => params[:id]})
+    @pages = @wiki.pages
   end
 
   def revisions
-    wiki = Wiki.find({:project => @project, :page => params[:id]})
-    @revisions = wiki.revisions
+    @wiki = Wiki.find({:project => @project, :page => params[:id]})
+    @revisions = @wiki.revisions
   end
 
   private
