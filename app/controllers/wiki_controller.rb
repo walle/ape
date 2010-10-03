@@ -28,6 +28,10 @@ class WikiController < ApplicationController
     end
   end
 
+  def new
+    @wiki = Wiki.new @project, File.join(params[:id].to_s, ''), ''
+  end
+
   def create
     wiki = Wiki.new @project, File.join(params[:id].to_s, params[:name]), params[:content]
 
