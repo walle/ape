@@ -3,6 +3,7 @@ en:
   save_and_continue: Save and continue
   delete: Delete
   cancel: Cancel
+  update: Update
   edit: Edit
   home: Home
   pages: Pages
@@ -19,4 +20,5 @@ en:
   new_comment: New comment
   comment: Comment
   comments: Comments
+  edit_comment: Edit comment
 

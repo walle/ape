@@ -10,8 +10,23 @@ class CommentsController < ApplicationController
     redirect_to wiki_page_url :id => params[:type_id]
   end
 
+  def edit
+    @comment = Comment.find({:project => @project, :id => params[:id], :type => params[:type], :type_id => params[:type_id]})
+  end
+
+  def update
+    comment = Comment.find({:project => @project, :id => params[:id], :type => params[:type], :type_id => params[:type_id]})
+
+    comment.contents = params[:comment]
+
+    comment.save! 'Update comment from ' + params[:type_id]
+
+    # Change this to take type into account
+    redirect_to wiki_page_url :id => params[:type_id]
+  end
+
   def destroy
-    comment = Comment.new @project, params[:id], params[:type], params[:type_id], params[:comment]
+    comment = Comment.find({:project => @project, :id => params[:id], :type => params[:type], :type_id => params[:type_id]})
 
     comment.destroy! 'Delete comment from ' + params[:type_id]
 

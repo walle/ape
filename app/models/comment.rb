@@ -44,7 +44,7 @@ class Comment
 
     type_id = hash[:type_id].to_s
     filename = File.join hash[:project].directory, hash[:type], type_id, hash[:id] + '.txt'
-    contents = self.file_contents hash[:project], filename
+    contents = read_file filename
 
     Comment.new hash[:project], hash[:id], hash[:type], hash[:type_id], contents
   end
