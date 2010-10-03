@@ -6,8 +6,9 @@ class CommentsController < ApplicationController
 
     comment.save! 'Add comment to ' + params[:type_id]
 
-    # Change this to take type into account
-    redirect_to wiki_page_url :id => params[:type_id]
+    if (params[:type] == 'wiki')
+      redirect_to wiki_page_url :id => params[:type_id]
+    end
   end
 
   def edit
@@ -21,8 +22,9 @@ class CommentsController < ApplicationController
 
     comment.save! 'Update comment from ' + params[:type_id]
 
-    # Change this to take type into account
-    redirect_to wiki_page_url :id => params[:type_id]
+    if (params[:type] == 'wiki')
+      redirect_to wiki_page_url :id => params[:type_id]
+    end
   end
 
   def destroy
@@ -30,8 +32,9 @@ class CommentsController < ApplicationController
 
     comment.destroy! 'Delete comment from ' + params[:type_id]
 
-    # Change this to take type into account
-    redirect_to wiki_page_url :id => params[:type_id]
+    if (params[:type] == 'wiki')
+      redirect_to wiki_page_url :id => params[:type_id]
+    end
   end
 
   private
