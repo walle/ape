@@ -2,96 +2,101 @@ class WikiController < ApplicationController
   before_filter :get_project
 
   def index
-    load_project_data @project, ''
+    wiki = Wiki.find({:project => @project, :page => ''})
+    @contents = wiki.to_html
+    rewrite_links ''
   end
 
   def show
     @page = params[:id]
-    load_project_data @project, @page
+    wiki = Wiki.find({:project => @project, :page => @page})
+    if wiki.contents.empty?
+      parent = wiki.parent
+      if (parent.nil?)
+        render_404
+      else
+        dirs = File.split @page
+        new_page = dirs[1]
+        if parent.page.empty?
+          redirect_to new_wiki_index_page_url :name => new_page
+        else
+          redirect_to new_wiki_page_url :id => parent.page, :name => new_page
+        end
+      end
+    else
+      @contents = wiki.to_html
+      rewrite_links @page
+    end
   end
 
   def create
-    id = params[:id]
-    name = params[:name].parameterize
-
-    if (id.nil?)
-      page = params[:name].parameterize
-    else
-      page = File.join id, name
-    end
+    wiki = Wiki.new @project, File.join(params[:id].to_s, params[:name]), params[:content]
 
     message = params[:commit_message]
     if message.empty?
-      message = 'Add page: ' + name
+      message = 'Add page: ' + params[:name]
     end
 
-    set_content page, params[:content], message
+    wiki.save! message
 
     if (params[:commit] == I18n.t(:save_and_continue))
-      redirect_to edit_wiki_page_url :id => page
+      redirect_to edit_wiki_page_url :id => wiki.page
     else
-      redirect_to wiki_page_url :id => page
+      redirect_to wiki_page_url :id => wiki.page
     end
   end
 
   def edit
-    load_contents @project, params[:id].to_s, params[:revision], false
+    wiki = Wiki.find({:project => @project, :page => params[:id], :revision => params[:revision]})
+    @contents = wiki.contents
   end
 
   def update
-    page = params[:id]
+    wiki = Wiki.find({:project => @project, :page => params[:id]})
 
     message = params[:commit_message]
     if message.empty?
-      message = 'Update page: ' + (page.nil? ? 'index' : page )
+      message = 'Update page: ' + wiki.page
     end
 
-    set_content page.to_s, params[:content], message
+    wiki.contents = params[:content]
 
-    if (page.nil?)
-      if (params[:commit] == I18n.t(:save_and_continue))
-        redirect_to edit_wiki_index_url
-      else
-        redirect_to wiki_index_url
-      end
+    wiki.save! message
+
+    if (params[:commit] == I18n.t(:save_and_continue))
+      redirect_to((wiki.page.empty? ? edit_wiki_index_url : edit_wiki_page_url(:id => wiki.page)))
     else
-      if (params[:commit] == I18n.t(:save_and_continue))
-        redirect_to edit_wiki_page_url :id => page
-      else
-        redirect_to wiki_page_url :id => page
-      end
+      redirect_to((wiki.page.empty? ? wiki_index_url : wiki_page_url(:id => wiki.page)))
     end
   end
 
   def destroy
-    page = params[:id]
+    wiki = Wiki.find({:project => @project, :page => params[:id]})
 
     message = params[:commit_message].to_s
     if message.empty?
-      message = 'Delete page: ' + (page.nil? ? 'index' : page )
+      message = 'Delete page: ' + wiki.page
     end
 
-    delete_file page, message
+    parent = wiki.parent
 
-    redirect_to wiki_index_url
+    wiki.destroy! message
+
+    if (parent.nil?)
+      redirect_to wiki_index_url
+    else
+      redirect_to((parent.page.empty? ? wiki_index_url : wiki_page_url(:id => parent.page)))
+    end
   end
 
   def pages
-    page = params[:id].to_s
-    Dir.chdir File.join @project.directory, 'wiki/', page
-    @pages = Dir['*/'].map do |p|
-      File.join page, p.delete('/')
-    end
+    wiki = Wiki.find({:project => @project, :page => params[:id]})
+    @pages = wiki.pages
   end
 
   def revisions
-    page = params[:id].to_s
-    filename = build_filename @project, page
-
-    git_repository = Git.open @project.directory
-    @revisions = git_repository.log(500).path(File.join('wiki', page, 'index.txt')).map do |commit|
-      commit
-    end
+    wiki = Wiki.find({:project => @project, :page => params[:id]})
+    @revisions = wiki.revisions
   end
 
   private
@@ -99,85 +104,16 @@ class WikiController < ApplicationController
       @project = Project.find_by_slug params[:project_id]
     end
 
-    def load_project_data(project, page, revision = nil, rewrite_links = true)
-      load_contents(project, page, revision, rewrite_links)
-      if !@contents.empty?
-        @contents = RedCloth.new(@contents).to_html.html_safe
-      else
-        dirs = File.split page
-        parent_dir = dirs[0]
-        if (File.exists? File.join project.directory, 'wiki/', parent_dir)
-          redirect_to new_wiki_page_url :id => parent_dir, :name => dirs[1]
-        else
-          render_404
-        end
-      end
-    end
-
-    def load_contents(project, page, revision = nil, rewrite_links = true)
-      filename = build_filename project, page
-      @contents = file_contents filename, revision
-      do_rewrite_links project, page if rewrite_links
-    end
-
-    def do_rewrite_links(project, page)git_repository = Git.open @project.directory
+    def rewrite_links(page)
       @contents.gsub!(/\[\[(.+)\]\]/) do
         url = $1.split('/').map { |file| file.parameterize }
         url = File.join page, url unless page.empty? || $1.start_with?('/')
 
-        if (File.exists?(File.join project.directory, 'wiki', url, 'index.txt'))
+        if (File.exists?(File.join @project.directory, 'wiki', url, 'index.txt'))
           '<a href="' + (url.empty? ? wiki_index_url : wiki_page_url(:id => url)) + '">' + $1 + '</a>'
         else
           '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
         end
-      end
-    end
-
-    def build_filename(project, page)
-      File.join project.directory, 'wiki/', page, 'index.txt'
-    end
-
-    def file_contents(filename, revision)
-      contents = ''
-      if (revision.nil?)
-        contents = read_file filename
-      else
-        git_repository = Git.open @project.directory
-        git_repository.checkout revision
-        contents = read_file filename
-        git_repository.checkout 'master'
-      end
-      contents
-    end
-
-    def read_file(filename)
-      contents = ''
-      if File.exists? filename
-        file = File.open(filename, "r")
-        contents = file.read
-      end
-      contents
-    end
-
-    def set_content(page, content, message)
-      page_dir = File.join @project.directory, 'wiki/', page
-      Dir.mkdir page_dir unless File.exists? page_dir
-      filename =  File.join page_dir, 'index.txt'
-      File.open filename, 'w' do |f|
-        f.puts content
-      end
-      git_repository = Git.open @project.directory
-      git_repository.add filename
-      git_repository.commit message rescue nil
-    end
-
-    def delete_file(page, message)
-      page_dir = File.join @project.directory, 'wiki/', page
-      filename =  File.join page_dir, 'index.txt'
-      if (File.exists? filename)
-        git_repository = Git.open @project.directory
-        git_repository.remove filename
-        git_repository.commit message rescue nil
       end
     end
 end
