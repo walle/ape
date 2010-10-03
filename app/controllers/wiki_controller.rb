@@ -123,8 +123,9 @@ class WikiController < ApplicationController
     def do_rewrite_links(project, page)git_repository = Git.open @project.directory
       @contents.gsub!(/\[\[(.+)\]\]/) do
         url = $1.split('/').map { |file| file.parameterize }
-        url = File.join page, url unless page.empty?
-        if (File.exists?(File.join project.directory, 'wiki/', url, 'index.txt'))
+        url = File.join page, url unless page.empty? || $1.start_with?('/')
+
+        if (File.exists?(File.join project.directory, 'wiki', url, 'index.txt'))
           '<a href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
         else
           '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
