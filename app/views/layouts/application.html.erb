@@ -24,7 +24,7 @@
   <div id="menu">
     <% unless @project.nil? -%>
       <ul class="left">
-      <li><%= link_to t(:wiki), wiki_index_url(@project) %></li>
+      <%= base_navigation %>
     </ul>
     <% end -%>
     <ul class="right">
