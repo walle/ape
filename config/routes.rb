@@ -20,7 +20,6 @@ Ape::Application.routes.draw do
   match '/projects/:project_id/wiki/*id(.:format)' => 'wiki#update', :as => 'wiki_page', :via => 'put'
   match '/projects/:project_id/wiki/*id(.:format)' => 'wiki#destroy', :as => 'wiki_page', :via => 'delete'
 
-  match '/projects/:project_id/:type/*type_id/comments/new(.:format)' => 'comments#new', :as => 'new_comment', :via => 'get'
   match '/projects/:project_id/:type/*type_id/comments/:id/edit(.:format)' => 'comments#edit', :as => 'edit_comment', :via => 'get'
   match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#create', :as => 'comment', :via => 'post'
   match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#update', :as => 'comment', :via => 'put'
