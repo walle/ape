@@ -3,6 +3,11 @@ Ape::Application.routes.draw do
     resources :tickets
   end
 
+  match '/projects/:project_id/:type/*type_id/comments/:id/edit(.:format)' => 'comments#edit', :as => 'edit_comment', :via => 'get'
+  match '/projects/:project_id/:type/*type_id/comments(.:format)' => 'comments#create', :as => 'comments', :via => 'post'
+  match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#update', :as => 'comment', :via => 'put'
+  match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#destroy', :as => 'comment', :via => 'delete'
+
   match '/projects/:project_id/wiki(.:format)' => 'wiki#index', :as => 'wiki_index', :via => 'get'
   match '/projects/:project_id/wiki/edit(.:format)' => 'wiki#edit', :as => 'edit_wiki_index', :via => 'get'
   match '/projects/:project_id/wiki(.:format)' => 'wiki#update', :as => 'wiki_index', :via => 'put'
@@ -19,12 +24,6 @@ Ape::Application.routes.draw do
   match '/projects/:project_id/wiki/*id(.:format)' => 'wiki#create', :as => 'wiki_page', :via => 'post'
   match '/projects/:project_id/wiki/*id(.:format)' => 'wiki#update', :as => 'wiki_page', :via => 'put'
   match '/projects/:project_id/wiki/*id(.:format)' => 'wiki#destroy', :as => 'wiki_page', :via => 'delete'
-
-  match '/projects/:project_id/:type/*type_id/comments/:id/edit(.:format)' => 'comments#edit', :as => 'edit_comment', :via => 'get'
-  match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#create', :as => 'comment', :via => 'post'
-  match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#update', :as => 'comment', :via => 'put'
-  match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#destroy', :as => 'comment', :via => 'delete'
-
 
   root :to => 'projects#index'
 end

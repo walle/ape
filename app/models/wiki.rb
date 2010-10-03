@@ -11,7 +11,7 @@ class Wiki
   end
 
   def self.find(hash)
-    return nil if !hash.has_key?(:project) && !hash.has_key?(:page)
+    return nil unless hash.has_key?(:project) && hash.has_key?(:page)
 
     page = hash[:page].to_s
     filename = File.join hash[:project].directory, 'wiki/', page, 'index.txt'

@@ -4,3 +4,18 @@
 
 <%= button_to t(:delete), wiki_page_path(@project), :method => :delete, :confirm => t(:are_you_sure) %>
 
+<%= render :partial => 'comments' %>
+
+<h2><%= t(:new_comment) %></h2>
+<%= form_tag comments_url(:project_id => params[:project_id], :type_id => params[:id], :type => :wiki) do |f| %>
+  <ul>
+    <li>
+      <%= label_tag :comment %><br />
+      <%= text_area_tag :comment %>
+    </li>
+    <li>
+      <%= submit_tag t(:new_comment) %>
+    </li>
+  </ul>
+<% end %>
+
