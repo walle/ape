@@ -25,6 +25,7 @@ class WikiController < ApplicationController
     else
       @contents = @wiki.to_html
       rewrite_links @wiki.page
+
       @comments = Comment.all({:project => @project, :type => 'wiki', :type_id => @wiki.page})
     end
   end

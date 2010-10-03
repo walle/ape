@@ -23,5 +23,11 @@
    | <%= link_to t(:revisions), revisions_url %>
 <% end %>
 
+<% unless @wiki.index? %>
+  <div class="right">
+    <%= button_to t(:delete), wiki_page_path(@project), :method => :delete, :confirm => t(:are_you_sure) %>
+  </div>
+<% end -%>
+
 <hr />
 
