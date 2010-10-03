@@ -126,7 +126,7 @@ class WikiController < ApplicationController
         url = File.join page, url unless page.empty? || $1.start_with?('/')
 
         if (File.exists?(File.join project.directory, 'wiki', url, 'index.txt'))
-          '<a href="' + wiki_page_url(:id => url) + '">' + $1 + '</a>'
+          '<a href="' + (url.empty? ? wiki_index_url : wiki_page_url(:id => url)) + '">' + $1 + '</a>'
         else
           '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
         end
