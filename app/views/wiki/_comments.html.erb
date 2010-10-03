@@ -3,7 +3,10 @@
   <h2><%= t(:comments) %></h2>
   <ul>
   <% @comments.each do |comment| -%>
-    <li><%= comment %></li>
+    <li>
+      <%= comment %>
+      <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
+    </li>
   <% end -%>
   </ul>
 <% end -%>

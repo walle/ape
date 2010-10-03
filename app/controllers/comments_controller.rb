@@ -10,6 +10,15 @@ class CommentsController < ApplicationController
     redirect_to wiki_page_url :id => params[:type_id]
   end
 
+  def destroy
+    comment = Comment.new @project, params[:id], params[:type], params[:type_id], params[:comment]
+
+    comment.destroy! 'Delete comment from ' + params[:type_id]
+
+    # Change this to take type into account
+    redirect_to wiki_page_url :id => params[:type_id]
+  end
+
   private
     def get_project
       @project = Project.find_by_slug params[:project_id]

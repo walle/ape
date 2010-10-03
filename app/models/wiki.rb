@@ -35,14 +35,14 @@ class Wiki
   end
 
   def destroy!(message)
-      page_dir = File.join @project.directory, 'wiki/', @page
+    page_dir = File.join @project.directory, 'wiki/', @page
 
-      if (File.exists?(page_dir) && File.directory?(page_dir))
-        git_repository = Git.open @project.directory
-        git_repository.remove page_dir, { :recursive => true }
-        git_repository.commit message rescue nil
-      end
+    if (File.exists?(page_dir) && File.directory?(page_dir))
+      git_repository = Git.open @project.directory
+      git_repository.remove page_dir, { :recursive => true }
+      git_repository.commit message rescue nil
     end
+  end
 
   def parent
     dirs = File.split @page

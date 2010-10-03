@@ -1,6 +1,8 @@
 require 'digest'
 
 class Comment
+  attr_reader :id, :type, :type_id
+  attr_accessor :contents
 
   def initialize(project, id, type, type_id, contents)
     @project = project
@@ -59,6 +61,16 @@ class Comment
     git_repository = Git.open @project.directory
     git_repository.add filename
     git_repository.commit message rescue nil
+  end
+
+  def destroy!(message)
+    file = File.join @project.directory, @type, @type_id, @id + '.txt'
+
+    if (File.exists?(file))
+      git_repository = Git.open @project.directory
+      git_repository.remove file
+      git_repository.commit message rescue nil
+    end
   end
 
   def to_s
