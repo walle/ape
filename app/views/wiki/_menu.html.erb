@@ -12,20 +12,19 @@
     <% revisions_url = wiki_page_revisions_url %>
   <% end %>
 
-  |
-
   <% unless @wiki.index? %>
     <% if (@wiki.parent.index?) %>
-      <%= link_to t(:parent), wiki_index_url(@project) %> |
+      | <%= link_to t(:parent), wiki_index_url(@project) %>
     <% else %>
-      <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.page) %> |
+      | <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.page) %>
     <% end %>
   <% end %>
-  <%= link_to t(:pages), pages_url %>
+
+  | <%= link_to t(:pages), pages_url %>
+  | <%= link_to t(:revisions), revisions_url %>
 
   <% unless no_edit %>
      | <%= link_to t(:edit), edit_url %>
-     | <%= link_to t(:revisions), revisions_url %>
   <% end %>
 
   <% unless @wiki.index? %>
