@@ -20,10 +20,14 @@ class Wiki
     filename = File.join hash[:project].directory, 'wiki/', page, 'index.txt'
     contents = self.file_contents hash[:project], filename, hash[:revision]
 
-    git_repository = Git.open hash[:project].directory
-    author = git_repository.log.path(filename).first.author
+    if (File.exists? filename)
+      git_repository = Git.open hash[:project].directory
+      author = git_repository.log.path(filename).first.author
 
-    Wiki.new hash[:project], page, author.name, author.email, author.date, contents
+      Wiki.new hash[:project], page, author.name, author.email, author.date, contents
+    else
+      Wiki.new hash[:project], page, '', '', '', contents
+    end
   end
 
   def save!(message)

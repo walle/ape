@@ -105,6 +105,17 @@ class WikiController < ApplicationController
     @revisions = @wiki.revisions
   end
 
+  def structure
+    @pages = []
+    Find.find(File.join @project.directory, 'wiki') do |file|
+      if (File.directory? (file))
+        file.gsub(/.?\/wiki(.+)/) do
+          @pages << $1
+        end
+      end
+    end
+  end
+
   private
     def get_project
       @project = Project.find_by_slug params[:project_id]

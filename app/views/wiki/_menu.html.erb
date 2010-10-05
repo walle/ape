@@ -1,33 +1,40 @@
-<% if (@wiki.index?) %>
-  <% edit_url = edit_wiki_index_url(@project) %>
-  <% pages_url = wiki_index_pages_url(@project) %>
-  <% revisions_url = wiki_index_revisions_url(@project) %>
-<% else %>
-  <% edit_url = edit_wiki_page_url(@project) %>
-  <% pages_url = wiki_pages_url(@project) %>
-  <% revisions_url = wiki_page_revisions_url(@project) %>
-<% end %>
-
 <%= link_to t(:home), wiki_index_url %> |
-<% unless @wiki.index? %>
-  <% if (@wiki.parent.index?) %>
-    <%= link_to t(:parent), wiki_index_url(@project) %> |
+<%= link_to t(:structure), wiki_structure_url %>
+
+<% unless (@wiki.nil?) %>
+  <% if (@wiki.index?) %>
+    <% edit_url = edit_wiki_index_url %>
+    <% pages_url = wiki_index_pages_url %>
+    <% revisions_url = wiki_index_revisions_url %>
   <% else %>
-    <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.page) %> |
+    <% edit_url = edit_wiki_page_url %>
+    <% pages_url = wiki_pages_url %>
+    <% revisions_url = wiki_page_revisions_url %>
   <% end %>
+
+  |
+
+  <% unless @wiki.index? %>
+    <% if (@wiki.parent.index?) %>
+      <%= link_to t(:parent), wiki_index_url(@project) %> |
+    <% else %>
+      <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.page) %> |
+    <% end %>
+  <% end %>
+  <%= link_to t(:pages), pages_url %>
+
+  <% unless no_edit %>
+     | <%= link_to t(:edit), edit_url %>
+     | <%= link_to t(:revisions), revisions_url %>
+  <% end %>
+
+  <% unless @wiki.index? %>
+    <div class="right">
+      <%= button_to t(:delete), wiki_page_path(@project), :method => :delete, :confirm => t(:are_you_sure) %>
+    </div>
+  <% end -%>
+<% else %>
+
 <% end %>
-<%= link_to t(:pages), pages_url %>
-
-<% unless no_edit %>
-   | <%= link_to t(:edit), edit_url %>
-   | <%= link_to t(:revisions), revisions_url %>
-<% end %>
-
-<% unless @wiki.index? %>
-  <div class="right">
-    <%= button_to t(:delete), wiki_page_path(@project), :method => :delete, :confirm => t(:are_you_sure) %>
-  </div>
-<% end -%>
-
 <hr />
 
