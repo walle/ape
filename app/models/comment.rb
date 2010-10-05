@@ -1,13 +1,15 @@
 require 'digest'
 
 class Comment
-  attr_reader :id, :type, :type_id
+  attr_reader :id, :type, :type_id, :name, :email
   attr_accessor :contents
 
-  def initialize(project, id, type, type_id, contents)
+  def initialize(project, id, type, type_id, name, email, contents)
     @project = project
     @type = type
     @type_id = type_id
+    @name = name
+    @email = email
     @contents = contents
 
     if id.nil?
@@ -30,10 +32,13 @@ class Comment
 
     comments = []
 
+    git_repository = Git.open hash[:project].directory
+
     files.sort.each do |file|
       filename = File.join dirname, file
       contents = read_file(filename)
-      comments << Comment.new(hash[:project], file.partition('.txt').first, hash[:type], hash[:type_id], contents) unless contents.empty?
+      author = git_repository.log.path(filename).first.author
+      comments << Comment.new(hash[:project], file.partition('.txt').first, hash[:type], hash[:type_id], author.name, author.email, contents) unless contents.empty?
     end
 
     comments
@@ -46,7 +51,10 @@ class Comment
     filename = File.join hash[:project].directory, hash[:type], type_id, hash[:id] + '.txt'
     contents = read_file filename
 
-    Comment.new hash[:project], hash[:id], hash[:type], hash[:type_id], contents
+    git_repository = Git.open hash[:project].directory
+    author = git_repository.log.path(filename).first.author
+
+    Comment.new hash[:project], hash[:id], hash[:type], hash[:type_id], author.name, author.email, contents
   end
 
   def save!(message)

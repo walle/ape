@@ -4,6 +4,8 @@
   <ul>
   <% @comments.each do |comment| -%>
     <li>
+      <%= gravatar_for comment %>
+      <%= comment.name %> - <%= comment.email %><br />
       <%= comment %>
       <%= link_to t(:edit), edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
       <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
