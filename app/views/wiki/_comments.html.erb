@@ -1,7 +1,14 @@
 <% unless @comments.empty? %>
   <h2><%= t(:comments) %></h2>
   <ul class="no-list">
-  <% @comments.each do |comment| -%>
+  <% @comments.each do |comment| %>
+    <% if @wiki.index? %>
+      <% edit_path = edit_index_comment_path(:project_id => params[:project_id], :type => :wiki, :id => comment.id) %>
+      <% delete_path = index_comment_path(:project_id => params[:project_id], :type => :wiki, :id => comment.id) %>
+    <% else %>
+      <% edit_url = edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
+      <% delete_path = comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
+    <% end -%>
     <li class="<%= cycle('even', 'odd') %>">
       <div class="span-4">
         <strong><%= mail_to comment.email, comment.name %></strong><br />
@@ -10,8 +17,8 @@
       </div>
       <div class="span-19 last">
         <div class="right">
-          <%= link_to t(:edit), edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
-          <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
+          <%= link_to t(:edit), edit_path %>
+          <%= button_to t(:delete), delete_path, :method => :delete, :confirm => t(:are_you_sure) %>
         </div>
         <%= comment %>
       </div>

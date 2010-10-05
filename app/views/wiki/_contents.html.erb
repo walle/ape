@@ -6,3 +6,25 @@
 
 <strong class="right"><%= t(:updated_on_by, :date => l(@wiki.date, :format => :long), :name => @wiki.name) %></strong>
 
+<%= render :partial => 'comments' %>
+
+<h2><%= t(:new_comment) %></h2>
+
+<% if @wiki.index? %>
+  <% url = index_comments_url(:project_id => params[:project_id], :type => :wiki) %>
+<% else %>
+  <% url = comments_url(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki) %>
+<% end -%>
+
+<%= form_tag url do |f| %>
+  <ul class="no-list">
+    <li>
+      <%= label_tag :comment %><br />
+      <%= text_area_tag :comment %>
+    </li>
+    <li>
+      <%= submit_tag t(:new_comment) %>
+    </li>
+  </ul>
+<% end %>
+

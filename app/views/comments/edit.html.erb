@@ -1,6 +1,12 @@
 <h1><%= t(:edit_comment) %></h1>
 
-<%= form_tag comment_url(:project_id => params[:project_id], :type_id => params[:type_id], :type => 'wiki', :id => params[:id]), :method => 'put' do |f| %>
+<% if params[:type_id].nil? %>
+  <% url = index_comment_url(:project_id => params[:project_id], :type => 'wiki', :id => params[:id]) %>
+<% else %>
+  <% url = comment_url(:project_id => params[:project_id], :type_id => params[:type_id], :type => 'wiki', :id => params[:id]) %>
+<% end %>
+
+<%= form_tag url, :method => 'put' do |f| %>
   <ul class="no-list">
     <li>
       <%= label_tag :comment %><br />

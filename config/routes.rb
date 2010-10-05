@@ -3,6 +3,11 @@ Ape::Application.routes.draw do
     resources :tickets
   end
 
+  match '/projects/:project_id/:type/comments/:id/edit(.:format)' => 'comments#edit', :as => 'edit_index_comment', :via => 'get'
+  match '/projects/:project_id/:type/comments(.:format)' => 'comments#create', :as => 'index_comments', :via => 'post'
+  match '/projects/:project_id/:type/comments/:id(.:format)' => 'comments#update', :as => 'index_comment', :via => 'put'
+  match '/projects/:project_id/:type/comments/:id(.:format)' => 'comments#destroy', :as => 'index_comment', :via => 'delete'
+
   match '/projects/:project_id/:type/*type_id/comments/:id/edit(.:format)' => 'comments#edit', :as => 'edit_comment', :via => 'get'
   match '/projects/:project_id/:type/*type_id/comments(.:format)' => 'comments#create', :as => 'comments', :via => 'post'
   match '/projects/:project_id/:type/*type_id/comments/:id(.:format)' => 'comments#update', :as => 'comment', :via => 'put'

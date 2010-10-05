@@ -7,7 +7,7 @@ class Comment
   def initialize(project, id, type, type_id, name, email, date, contents)
     @project = project
     @type = type
-    @type_id = type_id
+    @type_id = type_id.to_s
     @name = name
     @email = email
     @date = date

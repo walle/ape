@@ -5,6 +5,7 @@ class WikiController < ApplicationController
     @wiki = Wiki.find({:project => @project, :page => ''})
     @contents = @wiki.to_html
     rewrite_links ''
+    @comments = Comment.all({:project => @project, :type => 'wiki', :type_id => ''})
   end
 
   def show
@@ -31,11 +32,11 @@ class WikiController < ApplicationController
   end
 
   def new
-    @wiki = Wiki.new @project, File.join(params[:id].to_s, ''), ''
+    @wiki = Wiki.new @project, File.join(params[:id].to_s, ''), '', '', '', ''
   end
 
   def create
-    wiki = Wiki.new @project, File.join(params[:id].to_s, params[:name]), params[:content]
+    wiki = Wiki.new @project, File.join(params[:id].to_s, params[:name]), '', '', '', params[:content]
 
     message = params[:commit_message]
     if message.empty?
