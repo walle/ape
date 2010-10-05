@@ -1,12 +1,15 @@
 class Wiki
   include ActionController::UrlWriter
 
-  attr_reader :page
+  attr_reader :page, :name, :email, :date
   attr_accessor :contents
 
-  def initialize(project, page, contents)
+  def initialize(project, page, name, email, date, contents)
     @project = project
     @page = File.join page.split('/').map { |file| file.parameterize }
+    @name = name
+    @mail = email
+    @date = date
     @contents = contents
   end
 
@@ -17,7 +20,10 @@ class Wiki
     filename = File.join hash[:project].directory, 'wiki/', page, 'index.txt'
     contents = self.file_contents hash[:project], filename, hash[:revision]
 
-    Wiki.new hash[:project], page, contents
+    git_repository = Git.open hash[:project].directory
+    author = git_repository.log.path(filename).first.author
+
+    Wiki.new hash[:project], page, author.name, author.email, author.date, contents
   end
 
   def save!(message)
