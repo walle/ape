@@ -22,7 +22,7 @@
     <div class="breaker"></div>
   </div>
   <div id="menu">
-    <% unless @project.nil? -%>
+    <% unless params[:project_id].nil? %>
       <ul class="left">
       <%= base_navigation %>
     </ul>

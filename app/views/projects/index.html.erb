@@ -1,8 +1,12 @@
 <h1><%= t :projects %></h1>
 
-<ul>
-<% @projects.each do |project| %>
-  <li><%= link_to project.name, project %></li>
+<% if @projects.length > 0 %>
+  <ul>
+  <% @projects.each do |project| %>
+    <li><%= link_to project.name, project %></li>
+  <% end %>
+  </ul>
+<% else %>
+  <%= t(:no_projects_create_one_here, :new_project => link_to(t(:new_project), new_project_url)).html_safe %>
 <% end %>
-</ul>
 

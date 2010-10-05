@@ -23,4 +23,6 @@ en:
   edit_comment: Edit comment
   updated_on_by: Updated on %{date} by %{name}
   structure: Structure
+  no_projects_create_one_here: No projects! Create one here %{new_project}
+  new_project: New project
 
