@@ -6,7 +6,7 @@
 
 <h2><%= t(:new_comment) %></h2>
 <%= form_tag comments_url(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki) do |f| %>
-  <ul>
+  <ul class="no-list">
     <li>
       <%= label_tag :comment %><br />
       <%= text_area_tag :comment %>

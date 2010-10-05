@@ -148,3 +148,8 @@ ul
   clear: both;
 }
 
+.no-list
+{
+  list-style-type: none;
+}
+

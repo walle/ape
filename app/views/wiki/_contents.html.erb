@@ -4,5 +4,5 @@
 
 <hr />
 
-<strong class="right"><%= t(:updated_on_by, :date => @wiki.date, :name => @wiki.name) %></strong>
+<strong class="right"><%= t(:updated_on_by, :date => l(@wiki.date, :format => :long), :name => @wiki.name) %></strong>
 

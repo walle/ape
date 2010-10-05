@@ -1,14 +1,22 @@
 <% unless @comments.empty? %>
   <h2><%= t(:comments) %></h2>
-  <ul>
+  <ul class="no-list">
   <% @comments.each do |comment| -%>
     <li>
-      <%= gravatar_for comment %>
-      <%= comment.name %> - <%= comment.email %><br />
-      <%= comment %>
-      <%= link_to t(:edit), edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
-      <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
+      <div class="span-4">
+        <strong><%= mail_to comment.email, comment.name %></strong><br />
+        <%= l(comment.date, :format => :short) %><br />
+        <%= gravatar_for comment %>
+      </div>
+      <div class="span-18">
+        <div class="right">
+          <%= link_to t(:edit), edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
+          <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
+        </div>
+        <%= comment %>
+      </div>
     </li>
+    <hr />
   <% end -%>
   </ul>
 <% end -%>
