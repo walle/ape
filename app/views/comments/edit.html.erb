@@ -1,7 +1,7 @@
 <h1><%= t(:edit_comment) %></h1>
 
 <%= form_tag comment_url(:project_id => params[:project_id], :type_id => params[:type_id], :type => 'wiki', :id => params[:id]), :method => 'put' do |f| %>
-  <ul>
+  <ul class="no-list">
     <li>
       <%= label_tag :comment %><br />
       <%= text_area_tag :comment, @comment.contents %>

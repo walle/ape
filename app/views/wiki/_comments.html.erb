@@ -2,21 +2,21 @@
   <h2><%= t(:comments) %></h2>
   <ul class="no-list">
   <% @comments.each do |comment| -%>
-    <li>
+    <li class="<%= cycle('even', 'odd') %>">
       <div class="span-4">
         <strong><%= mail_to comment.email, comment.name %></strong><br />
         <%= l(comment.date, :format => :short) %><br />
         <%= gravatar_for comment %>
       </div>
-      <div class="span-18">
+      <div class="span-19 last">
         <div class="right">
           <%= link_to t(:edit), edit_comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id) %>
           <%= button_to t(:delete), comment_path(:project_id => params[:project_id], :type_id => params[:id].to_s, :type => :wiki, :id => comment.id), :method => :delete, :confirm => t(:are_you_sure) %>
         </div>
         <%= comment %>
       </div>
+      <div class="breaker"></div>
     </li>
-    <hr />
   <% end -%>
   </ul>
 <% end -%>

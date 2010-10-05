@@ -151,5 +151,21 @@ ul
 .no-list
 {
   list-style-type: none;
+  padding: 0;
+}
+
+.odd, .even
+{
+  padding: 6px;
+}
+
+.even
+{
+  background: #fbfbfb;
+}
+
+.odd
+{
+  background: #f8f8f8;
 }
 

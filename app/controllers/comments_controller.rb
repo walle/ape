@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
   before_filter :get_project
 
   def create
-    comment = Comment.new @project, nil, params[:type], params[:type_id], params[:comment]
+    comment = Comment.new @project, nil, params[:type], params[:type_id], '', '', '', params[:comment]
 
     comment.save! 'Add comment to ' + params[:type_id]
 
