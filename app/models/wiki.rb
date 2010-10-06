@@ -17,7 +17,7 @@ class Wiki
     return nil unless hash.has_key?(:project) && hash.has_key?(:page)
 
     page = hash[:page].to_s
-    filename = File.join hash[:project].directory, 'wiki/', page, 'index.txt'
+    filename = File.join hash[:project].directory, 'wiki', page, 'index.txt'
     contents = self.file_contents hash[:project], filename, hash[:revision]
 
     if (File.exists? filename)
@@ -31,7 +31,7 @@ class Wiki
   end
 
   def save!(message)
-    page_dir = File.join @project.directory, 'wiki/', @page
+    page_dir = File.join @project.directory, 'wiki', @page
     Dir.mkdir page_dir unless File.exists? page_dir
 
     filename =  File.join page_dir, 'index.txt'
@@ -45,7 +45,7 @@ class Wiki
   end
 
   def destroy!(message)
-    page_dir = File.join @project.directory, 'wiki/', @page
+    page_dir = File.join @project.directory, 'wiki', @page
 
     if (File.exists?(page_dir) && File.directory?(page_dir))
       git_repository = Git.open @project.directory
@@ -57,7 +57,7 @@ class Wiki
   def parent
     dirs = File.split @page
     parent_dir = dirs[0]
-    parent = File.join @project.directory, 'wiki/', parent_dir
+    parent = File.join @project.directory, 'wiki', parent_dir
     if (File.exists? parent)
       Wiki.find({:project => @project, :page => parent_dir})
     else
@@ -66,9 +66,13 @@ class Wiki
   end
 
   def pages
-    Dir.chdir File.join @project.directory, 'wiki/', @page
+    Dir.chdir File.join @project.directory, 'wiki', @page
     pages = Dir['*/'].map do |p|
-      File.join @page, p.delete('/')
+      if (@page.empty?)
+        p.delete('/')
+      else
+        File.join @page, p.delete('/')
+      end
     end
   end
 
