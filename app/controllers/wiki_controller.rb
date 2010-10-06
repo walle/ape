@@ -109,7 +109,7 @@ class WikiController < ApplicationController
     @pages = []
     Find.find(File.join @project.directory, 'wiki') do |file|
       if (File.directory? (file))
-        file.gsub(/.?\/wiki(.+)/) do
+        file.gsub(/.?\/wiki\/(.+)/) do
           @pages << $1
         end
       end
