@@ -39,9 +39,7 @@ class Wiki
       f.puts @contents
     end
 
-    git_repository = Git.open @project.directory
-    git_repository.add filename
-    git_repository.commit message rescue nil
+    @project.commit_all message
   end
 
   def destroy!(message)
@@ -50,7 +48,8 @@ class Wiki
     if (File.exists?(page_dir) && File.directory?(page_dir))
       git_repository = Git.open @project.directory
       git_repository.remove page_dir, { :recursive => true }
-      git_repository.commit message rescue nil
+
+      @project.commit_all message
     end
   end
 

@@ -68,9 +68,7 @@ class Comment
       f.puts @contents
     end
 
-    git_repository = Git.open @project.directory
-    git_repository.add filename
-    git_repository.commit message rescue nil
+    @project.commit_all message
   end
 
   def destroy!(message)
@@ -79,7 +77,7 @@ class Comment
     if (File.exists?(file))
       git_repository = Git.open @project.directory
       git_repository.remove file
-      git_repository.commit message rescue nil
+      @project.commit_all message
     end
   end
 

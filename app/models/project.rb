@@ -50,9 +50,16 @@ class Project < ActiveRecord::Base
     file.puts YAML.dump @config
     file.close
 
+    commit_all 'Update config'
+  end
+
+  def commit_all(message)
     git_repository = Git.init self.directory
+    git_repository.config('user.name', get_default_user['name'])
+    git_repository.config('user.email', get_default_user['email'])
+
     git_repository.add '.'
-    git_repository.commit 'Update config' rescue nil
+    git_repository.commit message rescue nil
   end
 
   def to_param
@@ -80,8 +87,6 @@ class Project < ActiveRecord::Base
       Dir.mkdir data_dir if not File.exists? data_dir
       Dir.mkdir self.directory if not File.exists? self.directory
 
-      git_repository = Git.init self.directory
-
       Dir.mkdir wiki_directory if not File.exists? wiki_directory
       File.open File.join(wiki_directory, 'index.txt'), 'w' do |f|
         f.puts 'h2. Welcome'
@@ -94,11 +99,7 @@ class Project < ActiveRecord::Base
 
       save_config
 
-      git_repository.config('user.name', 'system')
-      git_repository.config('user.email', 'system@local')
-
-      git_repository.add '.'
-      git_repository.commit 'Create project structure' rescue nil
+      commit_all 'Create project structure'
     end
 end
 
