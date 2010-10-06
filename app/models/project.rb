@@ -2,7 +2,7 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :slug, :default
 
   before_validation :slugify
-  before_save :create_project_structure
+  after_create :create_project_structure
 
   validates :name, :presence => true
   validates :slug, :presence => true,
