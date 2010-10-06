@@ -1,0 +1,18 @@
+<h1><%= t(:edit_project) %></h1>
+
+<%= form_for @project do |f| %>
+  <ul class="no-list">
+    <li>
+      <%= label_tag :default_user_name %><br />
+      <%= text_field_tag :default_user_name, @project.get_default_user['name'] %>
+    </li>
+    <li>
+      <%= label_tag :default_user_email %><br />
+      <%= text_field_tag :default_user_email, @project.get_default_user['email'] %>
+    </li>
+    <li>
+      <%= submit_tag t(:update) %> | <%= link_to t(:cancel), project_path %>
+    </li>
+  </ul>
+<% end %>
+
