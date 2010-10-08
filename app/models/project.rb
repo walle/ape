@@ -31,18 +31,22 @@ class Project < ActiveRecord::Base
     File.join self.directory, 'tickets'
   end
 
-  def set_default_user(name, email)
-    if (@config.nil?)
-      @config = {
-        'default_user' => { 'name' => name, 'email' => email }
-      }
-    else
-      @config['default_user'] = { 'name' => name, 'email' => email }
-    end
+  def default_user_name
+    @config['default_user']['name']
   end
 
-  def get_default_user
-    @config['default_user']
+  def default_user_email
+    @config['default_user']['email']
+  end
+
+  def default_user_name=(name)
+    load_config if @config.nil?
+    @config['default_user']['name'] = name
+  end
+
+  def default_user_email=(email)
+    load_config if @config.nil?
+    @config['default_user']['email'] = email
   end
 
   def save_config
@@ -55,8 +59,8 @@ class Project < ActiveRecord::Base
 
   def commit_all(message)
     git_repository = Git.init self.directory
-    git_repository.config('user.name', get_default_user['name'])
-    git_repository.config('user.email', get_default_user['email'])
+    git_repository.config('user.name', default_user_name)
+    git_repository.config('user.email', default_user_email)
 
     git_repository.add '.'
     git_repository.commit message rescue nil
@@ -95,7 +99,8 @@ class Project < ActiveRecord::Base
       Dir.mkdir tickets_directory if not File.exists? tickets_directory
       FileUtils.touch File.join(tickets_directory, '.gitinclude')
 
-      set_default_user 'system', 'system@local'
+      default_user_name = 'system'
+      default_user_email = 'system@local'
 
       save_config
 

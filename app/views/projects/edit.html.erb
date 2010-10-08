@@ -4,11 +4,11 @@
   <ul class="no-list">
     <li>
       <%= label_tag :default_user_name %><br />
-      <%= text_field_tag :default_user_name, @project.get_default_user['name'] %>
+      <%= text_field_tag :default_user_name, @project.default_user_name %>
     </li>
     <li>
       <%= label_tag :default_user_email %><br />
-      <%= text_field_tag :default_user_email, @project.get_default_user['email'] %>
+      <%= text_field_tag :default_user_email, @project.default_user_email %>
     </li>
     <li>
       <%= submit_tag t(:update) %> | <%= link_to t(:cancel), project_path %>

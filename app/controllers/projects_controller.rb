@@ -32,7 +32,8 @@ class ProjectsController < ApplicationController
 
   def update
     project = Project.find_by_slug params[:id]
-    project.set_default_user params[:default_user_name], params[:default_user_email]
+    project.default_user_name = params[:default_user_name]
+    project.default_user_email = params[:default_user_email]
 
     if (project.update_attributes params[:post])
       redirect_to project_url
