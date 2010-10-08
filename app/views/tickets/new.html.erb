@@ -1,0 +1,24 @@
+<h1><%= t :new_ticket %></h1>
+
+<%= form_tag tickets_url do |f| %>
+  <div id="ticket-form">
+    <ul>
+      <li>
+        <%= label_tag :name %><br />
+        <%= text_field_tag :name %>
+      </li>
+      <li>
+        <%= label_tag :content %><br />
+        <%= text_area_tag :content %>
+      </li>
+      <li>
+        <%= label_tag :commit_message %><br />
+        <%= text_field_tag :commit_message %>
+      </li>
+      <li>
+        <%= submit_tag t(:save) %> | <%= link_to t(:cancel), tickets_url %>
+      </li>
+    </ul>
+  </div>
+<% end %>
+

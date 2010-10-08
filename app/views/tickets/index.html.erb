@@ -1,0 +1,10 @@
+<h1><%= t(:tickets) %></h1>
+
+<ul>
+<% @tickets.each do |ticket| %>
+  <li>
+    <%= link_to ticket.id, ticket_path(:id => ticket.id) %>
+  </li>
+<% end %>
+</ul>
+

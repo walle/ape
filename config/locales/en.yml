@@ -25,4 +25,7 @@ en:
   structure: Structure
   no_projects_create_one_here: No projects! Create one here %{new_project}
   new_project: New project
+  tickets: Tickets
+  new_ticket: New ticket
+  edit_ticket: Edit ticket
 
