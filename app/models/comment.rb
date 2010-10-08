@@ -1,7 +1,7 @@
 require 'digest'
 
 class Comment
-  attr_reader :id, :type, :type_id, :name, :email, :date
+  attr_reader :project, :id, :type, :type_id, :name, :email, :date
   attr_accessor :contents
 
   def initialize(project, id, type, type_id, name, email, date, contents)

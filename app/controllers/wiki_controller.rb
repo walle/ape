@@ -3,8 +3,6 @@ class WikiController < ApplicationController
 
   def index
     @wiki = Wiki.find({:project => @project, :page => ''})
-    @contents = @wiki.to_html
-    rewrite_links ''
     @comments = Comment.all({:project => @project, :type => 'wiki', :type_id => ''})
   end
 
@@ -24,9 +22,6 @@ class WikiController < ApplicationController
         end
       end
     else
-      @contents = @wiki.to_html
-      rewrite_links @wiki.page
-
       @comments = Comment.all({:project => @project, :type => 'wiki', :type_id => @wiki.page})
     end
   end
@@ -119,19 +114,6 @@ class WikiController < ApplicationController
   private
     def get_project
       @project = Project.find_by_slug params[:project_id]
-    end
-
-    def rewrite_links(page)
-      @contents.gsub!(/\[\[(.+)\]\]/) do
-        url = $1.split('/').map { |file| file.parameterize }
-        url = File.join page, url unless page.empty? || $1.start_with?('/')
-
-        if (File.exists?(File.join @project.directory, 'wiki', url, 'index.txt'))
-          '<a href="' + (url.empty? ? wiki_index_url : wiki_page_url(:id => url)) + '">' + $1 + '</a>'
-        else
-          '<a class="new" href="' + wiki_page_url(:id => url) + '">[[' + $1 + ']]</a>'
-        end
-      end
     end
 end
 

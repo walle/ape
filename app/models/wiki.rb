@@ -1,7 +1,7 @@
 class Wiki
   include ActionController::UrlWriter
 
-  attr_reader :page, :name, :email, :date
+  attr_reader :project, :page, :name, :email, :date
   attr_accessor :contents
 
   def initialize(project, page, name, email, date, contents)
