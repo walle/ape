@@ -20,7 +20,7 @@
           <%= link_to t(:edit), edit_path %>
           <%= button_to t(:delete), delete_path, :method => :delete, :confirm => t(:are_you_sure) %>
         </div>
-        <%= comment %>
+        <%= rewrite_wiki_links comment %>
       </div>
       <div class="breaker"></div>
     </li>
