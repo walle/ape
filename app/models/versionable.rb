@@ -107,7 +107,7 @@ class Versionable
     parent_dir = dirs[0]
     parent = File.join @project.directory, @type_identifier, parent_dir
     if (File.exists? parent)
-      Wiki.find({:project => @project, :id => parent_dir})
+      @type_identifier.singularize.classify.constantize.find({:project => @project, :id => parent_dir})
     else
       nil
     end
