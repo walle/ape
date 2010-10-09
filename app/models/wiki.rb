@@ -1,12 +1,12 @@
 class Wiki
   include ActionController::UrlWriter
 
-  attr_reader :project, :page, :name, :email, :date
+  attr_reader :project, :id, :name, :email, :date
   attr_accessor :contents
 
-  def initialize(project, page, name, email, date, contents)
+  def initialize(project, id, name, email, date, contents)
     @project = project
-    @page = File.join page.split('/').map { |file| file.parameterize }
+    @id = File.join id.split('/').map { |file| file.parameterize }
     @name = name
     @mail = email
     @date = date
@@ -14,27 +14,27 @@ class Wiki
   end
 
   def self.find(hash)
-    return nil unless hash.has_key?(:project) && hash.has_key?(:page)
+    return nil unless hash.has_key?(:project) && hash.has_key?(:id)
 
-    page = hash[:page].to_s
-    filename = File.join hash[:project].directory, 'wiki', page, 'index.txt'
+    id = hash[:id].to_s
+    filename = File.join hash[:project].directory, 'wiki', id, 'index.txt'
     contents = self.file_contents hash[:project], filename, hash[:revision]
 
     if (File.exists? filename)
       git_repository = Git.open hash[:project].directory
       author = git_repository.log.path(filename).first.author
 
-      Wiki.new hash[:project], page, author.name, author.email, author.date, contents
+      Wiki.new hash[:project], id, author.name, author.email, author.date, contents
     else
-      Wiki.new hash[:project], page, '', '', '', contents
+      Wiki.new hash[:project], id, '', '', '', contents
     end
   end
 
   def save!(message)
-    page_dir = File.join @project.directory, 'wiki', @page
-    Dir.mkdir page_dir unless File.exists? page_dir
+    id_dir = File.join @project.directory, 'wiki', @id
+    Dir.mkdir id_dir unless File.exists? id_dir
 
-    filename =  File.join page_dir, 'index.txt'
+    filename =  File.join id_dir, 'index.txt'
     File.open(filename, 'w') do |f|
       f.puts @contents
     end
@@ -43,47 +43,47 @@ class Wiki
   end
 
   def destroy!(message)
-    page_dir = File.join @project.directory, 'wiki', @page
+    id_dir = File.join @project.directory, 'wiki', @id
 
-    if (File.exists?(page_dir) && File.directory?(page_dir))
+    if (File.exists?(id_dir) && File.directory?(id_dir))
       git_repository = Git.open @project.directory
-      git_repository.remove page_dir, { :recursive => true }
+      git_repository.remove id_dir, { :recursive => true }
 
       @project.commit_all message
     end
   end
 
   def parent
-    dirs = File.split @page
+    dirs = File.split @id
     parent_dir = dirs[0]
     parent = File.join @project.directory, 'wiki', parent_dir
     if (File.exists? parent)
-      Wiki.find({:project => @project, :page => parent_dir})
+      Wiki.find({:project => @project, :id => parent_dir})
     else
       nil
     end
   end
 
   def pages
-    Dir.chdir File.join @project.directory, 'wiki', @page
+    Dir.chdir File.join @project.directory, 'wiki', @id
     pages = Dir['*/'].map do |p|
-      if (@page.empty?)
+      if (@id.empty?)
         p.delete('/')
       else
-        File.join @page, p.delete('/')
+        File.join @id, p.delete('/')
       end
     end
   end
 
   def revisions
     git_repository = Git.open @project.directory
-    revisions = git_repository.log(500).path(File.join('wiki', @page, 'index.txt')).map do |commit|
+    revisions = git_repository.log(500).path(File.join('wiki', @id, 'index.txt')).map do |commit|
       commit
     end
   end
 
   def index?
-    @page.empty?
+    @id.empty?
   end
 
   def to_html

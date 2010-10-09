@@ -16,7 +16,7 @@
     <% if (@wiki.parent.index?) %>
       | <%= link_to t(:parent), wiki_index_url(@project) %>
     <% else %>
-      | <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.page) %>
+      | <%= link_to t(:parent), wiki_page_url(@project, :id => @wiki.parent.id) %>
     <% end %>
   <% end %>
 
