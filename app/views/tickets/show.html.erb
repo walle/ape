@@ -1,5 +1,5 @@
 <%= link_to t(:edit), edit_ticket_url %>
 <%= button_to t(:delete), ticket_path, :method => :delete, :confirm => t(:are_you_sure) %>
 
-<%= @ticket.to_html %>
+<%= rewrite_wiki_links @ticket %>
 
