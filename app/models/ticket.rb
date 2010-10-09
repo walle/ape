@@ -2,13 +2,14 @@ class Ticket
   attr_reader :project, :id, :name, :email, :date
   attr_accessor :contents
 
-  def initialize(project, id, name, email, date, contents)
-    @project = project
+  def initialize(hash)
+    @project = hash[:project]
+    id = hash[:id].to_s
     @id = File.join id.split('/').map { |file| file.parameterize }
-    @name = name
-    @mail = email
-    @date = date
-    @contents = contents
+    @name = hash[:name]
+    @mail = hash[:email]
+    @date = hash[:date]
+    @contents = hash[:contents]
   end
 
   def self.all(project)
@@ -30,7 +31,16 @@ class Ticket
       contents = read_file(filename)
       author = git_repository.log.path(filename).first.author
 
-      tickets << Ticket.new(project, dir, author.name, author.email, author.date, contents) unless contents.empty?
+      hash = {
+        :project => project,
+        :id => dir,
+        :name => author.name,
+        :email => author.email,
+        :date => author.date,
+        :contents => contents
+      }
+
+      tickets << Ticket.new(hash) unless contents.empty?
     end
 
     tickets
@@ -47,9 +57,18 @@ class Ticket
       git_repository = Git.open hash[:project].directory
       author = git_repository.log.path(filename).first.author
 
-      Ticket.new hash[:project], id, author.name, author.email, author.date, contents
+      hash = {
+        :project => hash[:project],
+        :id => id,
+        :name => author.name,
+        :email => author.email,
+        :date => author.date,
+        :contents => contents
+      }
+
+      Ticket.new hash
     else
-      Ticket.new hash[:project], id, '', '', '', contents
+      Ticket.new({:project => hash[:project], :id => id, :contents => contents})
     end
   end
 
