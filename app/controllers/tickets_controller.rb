@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
   before_filter :get_project
 
   def index
-    @tickets = Ticket.all(@project)
+    @tickets = Ticket.all({:project => @project})
   end
 
   def show
