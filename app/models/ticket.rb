@@ -1,4 +1,4 @@
-class Ticket < Base
+class Ticket < Versionable
   def initialize(hash)
     super hash.merge(:type_identifier => 'tickets')
   end

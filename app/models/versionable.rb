@@ -1,6 +1,6 @@
-class Base
+class Versionable
   attr_reader :project, :id, :name, :email, :date
-  attr_accessor :contents, :type_identifier
+  attr_accessor :contents
 
   def initialize(hash)
     return nil unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
@@ -9,7 +9,7 @@ class Base
     id = hash[:id].to_s
     @id = File.join id.split('/').map { |file| file.parameterize }
     @name = hash[:name]
-    @mail = hash[:email]
+    @email = hash[:email]
     @date = hash[:date]
     @contents = hash[:contents]
     @type_identifier = hash[:type_identifier]
@@ -69,12 +69,11 @@ class Base
     if (File.exists? filename)
       git_repository = Git.open hash[:project].directory
       author = git_repository.log.path(filename).first.author
-      hash.merge({
+      hash = hash.merge({
         :name => author.name,
         :email => author.email,
         :date => author.date
       })
-
     end
 
     hash[:type_identifier].singularize.classify.constantize.new hash
@@ -103,13 +102,51 @@ class Base
     end
   end
 
+  def parent
+    dirs = File.split @id
+    parent_dir = dirs[0]
+    parent = File.join @project.directory, @type_identifier, parent_dir
+    if (File.exists? parent)
+      Wiki.find({:project => @project, :id => parent_dir})
+    else
+      nil
+    end
+  end
+
+  def children
+    Dir.chdir File.join @project.directory, @type_identifier, @id
+    children = Dir['*/'].map do |p|
+      if (@id.empty?)
+        p.delete('/')
+      else
+        File.join @id, p.delete('/')
+      end
+    end
+  end
+
+  def revisions
+    git_repository = Git.open @project.directory
+    revisions = git_repository.log(500).path(File.join(@type_identifier, @id, 'index.txt')).map do |commit|
+      commit
+    end
+  end
+
   def to_html
     RedCloth.new(@contents).to_html.html_safe
   end
 
   private
-    def self.file_contents(project, filename)
-      read_file filename
+    def self.file_contents(project, filename, revision = nil)
+      contents = ''
+      if (revision.nil?)
+        contents = read_file filename
+      else
+        git_repository = Git.open project.directory
+        git_repository.checkout revision
+        contents = read_file filename
+        git_repository.checkout 'master'
+      end
+      contents
     end
 
     def self.read_file(filename)

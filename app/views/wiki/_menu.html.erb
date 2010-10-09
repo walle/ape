@@ -20,7 +20,7 @@
     <% end %>
   <% end %>
 
-  | <%= link_to t(:pages) + '(' + @wiki.pages.count.to_s + ')', pages_url %>
+  | <%= link_to t(:pages) + '(' + @wiki.children.count.to_s + ')', pages_url %>
   | <%= link_to t(:revisions) + '(' + @wiki.revisions.count.to_s + ')', revisions_url %>
 
   <% unless no_edit %>

@@ -92,7 +92,7 @@ class WikiController < ApplicationController
 
   def pages
     @wiki = Wiki.find({:project => @project, :id => params[:id]})
-    @pages = @wiki.pages
+    @pages = @wiki.children
   end
 
   def revisions
