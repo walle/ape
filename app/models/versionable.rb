@@ -3,7 +3,7 @@ class Versionable
   attr_accessor :contents
 
   def initialize(hash)
-    return nil unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
+    raise ArgumentError unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
 
     @project = hash[:project]
     id = hash[:id].to_s

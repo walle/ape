@@ -32,10 +32,12 @@ class Project < ActiveRecord::Base
   end
 
   def default_user_name
+    return 'system' if @config.nil?
     @config['default_user']['name']
   end
 
   def default_user_email
+    return 'system@local' if @config.nil?
     @config['default_user']['email']
   end
 
@@ -98,6 +100,8 @@ class Project < ActiveRecord::Base
 
       Dir.mkdir tickets_directory if not File.exists? tickets_directory
       FileUtils.touch File.join(tickets_directory, '.gitinclude')
+
+      FileUtils.touch config_file
 
       default_user_name = 'system'
       default_user_email = 'system@local'

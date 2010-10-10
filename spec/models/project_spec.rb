@@ -31,6 +31,7 @@ describe Project do
       }
       @project = Project.create @attr
     end
+
     it 'should have a parameterized slug' do
       @project.slug.should == @project.name.parameterize
     end
