@@ -35,7 +35,9 @@ Ape::Application.routes.draw do
   # Tickets
   match '/projects/:project_id/tickets(.:format)' => 'tickets#index', :as => 'tickets', :via => 'get'
   match '/projects/:project_id/tickets(.:format)' => 'tickets#create', :as => 'tickets', :via => 'post'
+  match '/projects/:project_id/tickets/*id(.:format)' => 'tickets#create', :as => 'create_sub_ticket', :via => 'post'
   match '/projects/:project_id/tickets/new(.:format)' => 'tickets#new', :as => 'new_ticket', :via => 'get'
+  match '/projects/:project_id/tickets/*id/new(.:format)' => 'tickets#new', :as => 'new_sub_ticket', :via => 'get'
   match '/projects/:project_id/tickets/*id/edit(.:format)' => 'tickets#edit', :as => 'edit_ticket', :via => 'get'
   match '/projects/:project_id/tickets/*id(.:format)' => 'tickets#show', :as => 'ticket', :via => 'get'
   match '/projects/:project_id/tickets/*id(.:format)' => 'tickets#update', :as => 'ticket', :via => 'put'

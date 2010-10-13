@@ -13,9 +13,8 @@ class TicketsController < ApplicationController
     @ticket = Ticket.new({:project => @project})
   end
 
-
   def create
-    ticket = Ticket.new({:project => @project, :id => params[:name], :contents => params[:content]})
+    ticket = Ticket.new({:project => @project, :id => File.join(params[:id].to_s, params[:name]), :contents => params[:content]})
 
     message = params[:commit_message]
     if message.empty?

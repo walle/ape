@@ -1,6 +1,12 @@
 <h1><%= t :new_ticket %></h1>
 
-<%= form_tag tickets_url do |f| %>
+<% if (params[:id].nil?) %>
+  <% url = tickets_url %>
+<% else %>
+  <% url = create_sub_ticket_url %>
+<% end %>
+
+<%= form_tag url do |f| %>
   <div id="ticket-form">
     <ul>
       <li>
