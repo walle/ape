@@ -16,7 +16,7 @@ class Versionable
   end
 
   def self.all(hash)
-    return nil unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
+    raise ArgumentError unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
 
     directories = []
     Find.find(File.join hash[:project].directory, hash[:type_identifier]) do |file|
@@ -53,7 +53,7 @@ class Versionable
   end
 
   def self.find(hash)
-    return nil unless hash.has_key?(:project) && hash.has_key?(:id) && hash.has_key?(:type_identifier)
+    raise ArgumentError unless hash.has_key?(:project) && hash.has_key?(:type_identifier)
 
     id = hash[:id].to_s
     filename = File.join hash[:project].directory, hash[:type_identifier], id, 'index.txt'
