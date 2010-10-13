@@ -60,7 +60,7 @@ class Project < ActiveRecord::Base
   end
 
   def commit_all(message)
-    git_repository = Git.init self.directory
+    git_repository = Git.open self.directory
     git_repository.config('user.name', default_user_name)
     git_repository.config('user.email', default_user_email)
 
@@ -90,15 +90,17 @@ class Project < ActiveRecord::Base
 
     def create_project_structure
       data_dir = File.join(Rails.root, 'data')
-      Dir.mkdir data_dir if not File.exists? data_dir
-      Dir.mkdir self.directory if not File.exists? self.directory
+      Dir.mkdir data_dir unless File.exists? data_dir
+      Dir.mkdir self.directory unless File.exists? self.directory
 
-      Dir.mkdir wiki_directory if not File.exists? wiki_directory
+      git_repository = Git.init self.directory
+
+      Dir.mkdir wiki_directory unless File.exists? wiki_directory
       File.open File.join(wiki_directory, 'index.txt'), 'w' do |f|
         f.puts 'h2. Welcome'
       end
 
-      Dir.mkdir tickets_directory if not File.exists? tickets_directory
+      Dir.mkdir tickets_directory unless File.exists? tickets_directory
       FileUtils.touch File.join(tickets_directory, '.gitinclude')
 
       FileUtils.touch config_file
