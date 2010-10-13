@@ -101,14 +101,7 @@ class WikiController < ApplicationController
   end
 
   def structure
-    @pages = []
-    Find.find(File.join @project.directory, 'wiki') do |file|
-      if (File.directory? (file))
-        file.gsub(/.?\/wiki\/(.+)/) do
-          @pages << $1
-        end
-      end
-    end
+    @pages = Wiki.all({:project => @project})
   end
 
   private
