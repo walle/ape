@@ -49,6 +49,15 @@ class Ticket < Versionable
     return name_cmp
   end
 
+  def open?
+    load_config
+    @config['status'] == 'Open'
+  end
+
+  def closed?
+    !open?
+  end
+
   def config_file
     File.join directory, 'config.yml'
   end
