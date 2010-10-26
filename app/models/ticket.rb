@@ -41,7 +41,12 @@ class Ticket < Versionable
       items << Ticket.new(hash) unless contents.empty?
     end
 
-    items
+    items.sort
+  end
+
+  def <=>(o)
+    name_cmp = @id <=> o.id
+    return name_cmp
   end
 
   def config_file
