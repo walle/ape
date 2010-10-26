@@ -50,12 +50,16 @@ class Ticket < Versionable
   end
 
   def open?
-    load_config
-    @config['status'] == 'Open'
+    status == 'Open'
   end
 
   def closed?
     !open?
+  end
+
+  def status
+    load_config
+    @config['status']
   end
 
   def config_file

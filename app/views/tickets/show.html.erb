@@ -1,7 +1,11 @@
 <%= link_to t(:edit), edit_ticket_url %>
 <%= button_to t(:delete), ticket_path, :method => :delete, :confirm => t(:are_you_sure) %>
 
-<%= gravatar_for @ticket %> - <%= @ticket.date %>
+<p>
+  <%= gravatar_for @ticket %> - <%= time_ago_in_words @ticket.date.to_time %> <%= t(:ago) %>
+</p>
+
+<p><%= t(:status) %>: <%= @ticket.status %></p>
 
 <%= rewrite_wiki_links @ticket %>
 
