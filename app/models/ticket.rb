@@ -43,5 +43,41 @@ class Ticket < Versionable
 
     items
   end
+
+  def config_file
+    File.join directory, 'config.yml'
+  end
+
+  def save_config
+    unless @config.nil?
+      file = File.new config_file, 'w'
+      file.puts YAML.dump @config
+      file.close
+
+      @project.commit_all 'Update config'
+    end
+  end
+
+  def save!(message)
+    super message
+
+    create_config_file
+    save_config
+  end
+
+  private
+    def create_config_file
+      unless File.exists? config_file
+        @config = {}
+        @config['status'] = 'Open'
+      end
+      save_config
+    end
+
+    def load_config
+      file = File.new config_file, 'r'
+      @config = YAML.load file.read
+      file.close
+    end
 end
 
