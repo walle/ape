@@ -80,10 +80,9 @@ class Versionable
   end
 
   def save!(message)
-    id_dir = File.join @project.directory, @type_identifier, @id
-    Dir.mkdir id_dir unless File.exists? id_dir
+    Dir.mkdir directory unless File.exists? directory
 
-    filename =  File.join id_dir, 'index.txt'
+    filename =  File.join directory, 'index.txt'
     File.open(filename, 'w') do |f|
       f.puts @contents
     end
@@ -92,11 +91,9 @@ class Versionable
   end
 
   def destroy!(message)
-    id_dir = File.join @project.directory, @type_identifier, @id
-
-    if (File.exists?(id_dir) && File.directory?(id_dir))
+    if (File.exists?(directory) && File.directory?(directory))
       git_repository = Git.open @project.directory
-      git_repository.remove id_dir, { :recursive => true }
+      git_repository.remove directory, { :recursive => true }
 
       @project.commit_all message
     end
@@ -114,7 +111,7 @@ class Versionable
   end
 
   def children
-    Dir.chdir File.join @project.directory, @type_identifier, @id
+    Dir.chdir directory
     children = Dir['*/'].map do |p|
       if (@id.empty?)
         p.delete('/')
@@ -156,6 +153,10 @@ class Versionable
         contents = file.read
       end
       contents
+    end
+
+    def directory
+      File.join @project.directory, @type_identifier, @id
     end
 end
 
